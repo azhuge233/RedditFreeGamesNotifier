@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+		<PublishSingleFile>true</PublishSingleFile>
+		<DebugType>none</DebugType>
+		<DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
+    <PackageReference Include="MailKit" Version="3.4.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+    <PackageReference Include="MimeKit" Version="3.4.2" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.1.0" />
+    <PackageReference Include="Telegram.Bot" Version="18.0.0" />
+  </ItemGroup>
+
+	<Target Name="CopyNlogConfigAfterBuild" AfterTargets="AfterBuild">
+		<Copy SourceFiles="Config\nlog.config" DestinationFolder="$(OutDir)" />
+	</Target>
+	<Target Name="CopyNlogConfigOnPublish" AfterTargets="Publish">
+		<Copy SourceFiles="Config\nlog.config" DestinationFolder="$(PublishDir)" />
+	</Target>
+
+	<ItemGroup>
+		<None Update="Config\config.json" CopyToOutputDirectory="PreserveNewest" />
+		<None Update="Records\records.json" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+
+</Project>

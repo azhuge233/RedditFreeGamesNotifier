@@ -7,7 +7,8 @@ A CLI tool
   - [https://old.reddit.com/r/FreeGameFindings/](https://old.reddit.com/r/FreeGameFindings/)
   - [https://old.reddit.com/r/freegames/](https://old.reddit.com/r/freegames/) 
 - Send notifications to Telegram, Bark, Email, QQ, PushPlus(Wechat), DingTalk, PushDeer and Discord.
-- Auto claim Steam free games with ASF `addlicense` command.
+- Auto claim detected Steam free games with ASF `addlicense` command.
+- Auto claim detected GOG giveaways.
 
 Demo Telegram Channel [@azhuge233_FreeGames](https://t.me/azhuge233_FreeGames)
 
@@ -25,7 +26,8 @@ dotnet publish -c Release -o /your/path/here -r [win-x64/osx-x64/...] --sc
 
 Set your telegram bot token and chat ID in config.json.
 
-Check [wiki](https://github.com/azhuge233/SteamDB-FreeGames-dotnet/wiki/Config-Description) for more explanations, only notify and ASF varaibles are available for this project.
+Check [
+SteamDB-FreeGames-dotnet wiki](https://github.com/azhuge233/SteamDB-FreeGames-dotnet/wiki/Config-Description) and [GOGGiveawayNotifier wiki](https://github.com/azhuge233/GOGGiveawayNotifier/wiki/Config-Description) for more config explanations and how to get GOG cookie, only notify, ASF and GOG varaibles are available for this project.
 
 ### Repeatedly running
 

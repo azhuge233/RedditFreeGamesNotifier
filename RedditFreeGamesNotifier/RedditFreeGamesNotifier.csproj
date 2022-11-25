@@ -5,6 +5,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
 		<PublishSingleFile>true</PublishSingleFile>
+		<PublishTrimmed>false</PublishTrimmed>
 		<DebugType>none</DebugType>
 		<DebugSymbols>false</DebugSymbols>
   </PropertyGroup>

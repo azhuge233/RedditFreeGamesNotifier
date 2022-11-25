@@ -1,4 +1,6 @@
-﻿namespace RedditFreeGamesNotifier.Strings {
+﻿using System.Runtime.CompilerServices;
+
+namespace RedditFreeGamesNotifier.Strings {
 	internal class ParseStrings {
 		internal static readonly Dictionary<string, string> SupportedPlatform = new() {
 			{ "store.steampowered.com", "Steam" },
@@ -19,6 +21,7 @@
 		internal static readonly string subIdRegex = @"sub/[0-9]*";
 
 		internal static readonly string steamAppDetailGameNameKey = "name";
+		internal static readonly string gogGiveawayUrlKeyword = "#giveaway";
 
 		#region Xpaths
 		internal static readonly string redditDivXPath = @".//div[contains(@class, 'thing') and contains(@class, 'link')]";
@@ -43,6 +46,8 @@
 
 		internal static readonly string infoFoundNewGame = "Found new free game: {0}";
 		internal static readonly string debugFoundInOldRecords = "Found {0} in old records, stop adding to push list";
+
+		internal static readonly string debugIsGOGGiveaway = "GOG Giveaway detected: {0}";
 		#endregion
 	}
 }

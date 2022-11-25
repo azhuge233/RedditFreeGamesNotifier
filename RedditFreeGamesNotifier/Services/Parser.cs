@@ -95,11 +95,13 @@ namespace RedditFreeGamesNotifier.Services {
 				if (record.Platform == "GOG") {
 					_logger.LogDebug(ParseStrings.debugGetGameNameWithUrl, record.Url);
 
-					var source = await services.GetRequiredService<Scraper>().GetSource(record.Url);
-					var htmlDoc = new HtmlDocument();
-					htmlDoc.LoadHtml(source);
+					if (!record.Url.Contains(ParseStrings.gogGiveawayUrlKeyword)) {
+						var source = await services.GetRequiredService<Scraper>().GetSource(record.Url);
+						var htmlDoc = new HtmlDocument();
+						htmlDoc.LoadHtml(source);
 
-					gameName = htmlDoc.DocumentNode.SelectSingleNode(ParseStrings.gogGameTitleXPath).InnerText;
+						gameName = htmlDoc.DocumentNode.SelectSingleNode(ParseStrings.gogGameTitleXPath).InnerText;
+					} else _logger.LogDebug(ParseStrings.debugIsGOGGiveaway, record.Url);
 				}
 
 				if (record.Platform == "Steam") {

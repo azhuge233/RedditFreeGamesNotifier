@@ -1,0 +1,57 @@
+name: Publish
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+    paths-ignore:
+      - '**/**.md'
+      - '.github/**'
+
+jobs:
+  publish:
+    name: Publish the app
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+    
+    - name: Publish
+      run: |
+        dotnet restore
+        dotnet publish -c release -r win-x64 -o bin/release/win-x64 -p:PublishSingleFile=true --sc
+        dotnet publish -c release -r osx-x64 -o bin/release/osx-x64 -p:PublishSingleFile=true --sc
+        dotnet publish -c release -r linux-x64 -o bin/release/linux-x64 -p:PublishSingleFile=true --sc
+      
+    - name: Install Zip
+      uses: montudor/action-zip@v1
+      
+    - name: Create Zip
+      run: |
+        zip -qq -r Reddit-win-x64.zip win-x64/*
+        zip -qq -r Reddit-osx-x64.zip osx-x64/*
+        zip -qq -r Reddit-linux-x64.zip linux-x64/*
+      working-directory: bin/release
+      
+    - name: Upload zip
+      uses: actions/upload-artifact@v3
+      with:
+        name: My Artifact
+        path: bin/release/*.zip
+        if-no-files-found: warn
+        
+    - name: Create Release
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "latest"
+        prerelease: false
+        files: bin/release/*.zip

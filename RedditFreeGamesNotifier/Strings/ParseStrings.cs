@@ -48,6 +48,8 @@ namespace RedditFreeGamesNotifier.Strings {
 		internal static readonly string debugFoundInOldRecords = "Found {0} in old records, stop adding to push list";
 
 		internal static readonly string debugIsGOGGiveaway = "GOG Giveaway detected: {0}";
+
+		internal static readonly string errorGetGameName = "Cannot fetch game name from: {0}, probably caused by poor internet connection.";
 		#endregion
 	}
 }

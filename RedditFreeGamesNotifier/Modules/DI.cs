@@ -18,6 +18,7 @@ namespace RedditFreeGamesNotifier.Modules {
 			   .AddTransient<Parser>()
 			   .AddTransient<NotifyOP>()
 			   .AddTransient<ASFOP>()
+			   .AddTransient<GOGGiveawayClaimer>()
 			   .AddTransient<Bark>()
 			   .AddTransient<TelegramBot>()
 			   .AddTransient<Email>()

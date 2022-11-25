@@ -87,6 +87,13 @@ namespace RedditFreeGamesNotifier.Services {
 						throw new Exception(message: "No ASF IPC Url provided!");
 				}
 
+				//GOG
+				if (config.EnableGOGAutoClaim) {
+					if (string.IsNullOrEmpty(config.Cookie)) {
+						throw new Exception(message: "No GOG cookies provided!");
+					}
+				}
+
 				_logger.LogDebug($"Done: {debugCheckValid}");
 			} catch (Exception) {
 				_logger.LogError($"Error: {debugCheckValid}");

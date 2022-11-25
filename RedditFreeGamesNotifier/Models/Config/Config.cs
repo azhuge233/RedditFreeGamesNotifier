@@ -1,4 +1,4 @@
 ﻿namespace RedditFreeGamesNotifier.Models.Config {
-	public	class Config: ASFConfig {
+	public	class Config: GOGConfig {
 	}
 }

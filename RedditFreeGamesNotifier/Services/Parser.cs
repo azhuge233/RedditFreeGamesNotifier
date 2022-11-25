@@ -65,7 +65,10 @@ namespace RedditFreeGamesNotifier.Services {
 
 						if (!oldRecords.Any(record => record.RedditUrl == newRecord.RedditUrl || record.Url == newRecord.Url)) {
 							_logger.LogInformation(ParseStrings.infoFoundNewGame, newRecord.Name);
+
 							if (!string.IsNullOrEmpty(newRecord.AppId)) result.SteamFreeGames.Add(newRecord);
+							else if (newRecord.Platform == "GOG") result.GOGGiveawayRecords.Add(newRecord);
+
 							result.NotifyRecords.Add(newRecord);
 						} else _logger.LogDebug(ParseStrings.debugFoundInOldRecords, newRecord.Name);
 					}

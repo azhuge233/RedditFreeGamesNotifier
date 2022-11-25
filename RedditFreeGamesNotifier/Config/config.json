@@ -35,5 +35,8 @@
   "EnableASF": false,
   "ASFIPCUrl": "",
   "ASFIPCPassword": "",
-  "NotifyASFResult": false
+  "NotifyASFResult": false,
+
+  "EnableGOGAutoClaim": false,
+  "Cookie":  ""
 }

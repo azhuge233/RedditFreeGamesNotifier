@@ -119,7 +119,8 @@ namespace RedditFreeGamesNotifier.Services {
 				return gameName;
 			} catch (Exception) {
 				_logger.LogError($"Error: {ParseStrings.debugGetGameNameWithUrl}", record.Url);
-				throw;
+				return redditTitle;
+				// throw;
 			}
 		}
 

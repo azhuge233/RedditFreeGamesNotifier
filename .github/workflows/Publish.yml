@@ -40,13 +40,6 @@ jobs:
         zip -qq -r Reddit-osx-x64.zip osx-x64/*
         zip -qq -r Reddit-linux-x64.zip linux-x64/*
       working-directory: bin/release
-      
-    - name: Upload zip
-      uses: actions/upload-artifact@v3
-      with:
-        name: My Artifact
-        path: bin/release/*.zip
-        if-no-files-found: warn
         
     - name: Create Release
       uses: "marvinpinto/action-automatic-releases@latest"

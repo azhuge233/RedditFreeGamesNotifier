@@ -103,7 +103,11 @@ namespace RedditFreeGamesNotifier.Services {
 						var htmlDoc = new HtmlDocument();
 						htmlDoc.LoadHtml(source);
 
-						gameName = htmlDoc.DocumentNode.SelectSingleNode(ParseStrings.gogGameTitleXPath).InnerText;
+						// Fixes some bad links skip to GOG's all games page, causes fetch game name error
+						// If the page title ends with "DRM-free | GOG.COM" means the link is bad, return reddit Title instead
+						var gogTitle = htmlDoc.DocumentNode.SelectSingleNode(ParseStrings.gogTitleXPath).InnerText;
+						if (!gogTitle.Contains(ParseStrings.gogAllGamesPageTitle))
+							gameName = htmlDoc.DocumentNode.SelectSingleNode(ParseStrings.gogGameTitleXPath).InnerText;
 					} else _logger.LogDebug(ParseStrings.debugIsGOGGiveaway, record.Url);
 				}
 

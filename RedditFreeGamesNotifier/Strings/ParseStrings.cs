@@ -23,6 +23,8 @@ namespace RedditFreeGamesNotifier.Strings {
 		internal static readonly string steamAppDetailGameNameKey = "name";
 		internal static readonly string gogGiveawayUrlKeyword = "#giveaway";
 
+		internal static readonly string gogAllGamesPageTitle = "DRM-free | GOG.COM";
+
 		#region Xpaths
 		internal static readonly string redditDivXPath = @".//div[contains(@class, 'thing') and contains(@class, 'link')]";
 		internal static readonly string redditTitleLinkXPath = @".//div[contains(@class, 'entry')]//p[contains(@class, 'title')]//a[contains(@class, 'title')]";
@@ -30,6 +32,7 @@ namespace RedditFreeGamesNotifier.Strings {
 		internal static readonly string redditEndedSpanXPath = @".//div[contains(@class, 'entry')]//p[contains(@class, 'title')]//span[contains(@class, 'linkflairlabel')]";
 
 		internal static readonly string gogGameTitleXPath = @".//h1[contains(@class, 'productcard-basics__title')]";
+		internal static readonly string gogTitleXPath = @".//title";
 		#endregion
 
 		#region data attributes key

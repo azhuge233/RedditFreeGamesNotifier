@@ -28,8 +28,6 @@ jobs:
       run: |
         dotnet restore
         dotnet publish -c release -r win-x64 -o bin/release/win-x64 -p:PublishSingleFile=true --sc
-        dotnet publish -c release -r osx-x64 -o bin/release/osx-x64 -p:PublishSingleFile=true --sc
-        dotnet publish -c release -r linux-x64 -o bin/release/linux-x64 -p:PublishSingleFile=true --sc
       
     - name: Install Zip
       uses: montudor/action-zip@v1
@@ -37,8 +35,6 @@ jobs:
     - name: Create Zip
       run: |
         zip -qq -r Reddit-win-x64.zip win-x64/*
-        zip -qq -r Reddit-osx-x64.zip osx-x64/*
-        zip -qq -r Reddit-linux-x64.zip linux-x64/*
       working-directory: bin/release
         
     - name: Create Release

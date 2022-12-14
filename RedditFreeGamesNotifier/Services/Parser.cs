@@ -47,7 +47,18 @@ namespace RedditFreeGamesNotifier.Services {
 						var redditLink = new StringBuilder().Append(ParseStrings.redditUrl).Append(dataPermaLink).ToString();
 						var appId = GetGameId(dataUrl);
 
-						if (appId == string.Empty && platform == "Steam") continue;
+						if (result.Records.Any(record => record.Url == dataUrl)) {
+							_logger.LogDebug(ParseStrings.debugFoundInPreviousPage, dataUrl);
+							continue;
+						}
+						if (platform == "Steam" && appId == string.Empty) {
+							_logger.LogDebug(ParseStrings.debugSteamIDNotDetected, dataUrl);
+							continue;
+						}
+						if (platform == "Itch.io" && !await IsClaimable(dataUrl)) {
+							_logger.LogDebug(ParseStrings.debugItchIOCNotClaimable, dataUrl);
+							continue;
+						}
 
 						_logger.LogDebug($"{dataUrl} | {redditLink} | {platform} | {appId}");
 
@@ -58,8 +69,6 @@ namespace RedditFreeGamesNotifier.Services {
 							AppId = appId
 						};
 						newRecord.Name = await GetGameName(newRecord, redditTitle);
-
-						if (result.Records.Any(record => record.Url == newRecord.Url)) continue;
 
 						result.Records.Add(newRecord);
 
@@ -128,6 +137,31 @@ namespace RedditFreeGamesNotifier.Services {
 				_logger.LogError(ParseStrings.errorGetGameName, record.Url);
 
 				return redditTitle;
+			}
+		}
+
+		private async Task<bool> IsClaimable(string url) {
+			var result = true;
+
+			try {
+				_logger.LogDebug($"{ParseStrings.debugCheckItchIOClaimable} | {url}");
+
+				var source = await services.GetRequiredService<Scraper>().GetSource(url);
+				var htmlDoc = new HtmlDocument();
+				htmlDoc.LoadHtml(source);
+
+				var buyButton = htmlDoc.DocumentNode.SelectSingleNode(ParseStrings.itchioBuyButtonXPath);
+				// var downloadButton = htmlDoc.DocumentNode.SelectSingleNode(ParseStrings.itchioDownloadButtonXPath);
+
+				//result = buyButton != null && downloadButton == null && buyButton.InnerText.Contains(ParseStrings.itchioDownloadOrClaimText);
+				result = buyButton != null && buyButton.InnerText.Contains(ParseStrings.itchioDownloadOrClaimText);
+
+				_logger.LogDebug($"Done: {ParseStrings.debugCheckItchIOClaimable}");
+				return result;
+			} catch (Exception) {
+				_logger.LogError($"Error: {ParseStrings.debugCheckItchIOClaimable}");
+
+				return result;
 			}
 		}
 

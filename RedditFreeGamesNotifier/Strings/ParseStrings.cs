@@ -33,6 +33,11 @@ namespace RedditFreeGamesNotifier.Strings {
 
 		internal static readonly string gogGameTitleXPath = @".//h1[contains(@class, 'productcard-basics__title')]";
 		internal static readonly string gogTitleXPath = @".//title";
+
+		internal static readonly string itchioBuyButtonXPath = @".//a[contains(@class, 'buy_btn')]";
+		internal static readonly string itchioDownloadButtonXPath = @".//a[contains(@class, 'download_btn')]";
+		// internal static readonly string itchioDownloadOrClaimText = @"Download or claim";
+		internal static readonly string itchioDownloadOrClaimText = @"claim";
 		#endregion
 
 		#region data attributes key
@@ -53,6 +58,12 @@ namespace RedditFreeGamesNotifier.Strings {
 		internal static readonly string debugIsGOGGiveaway = "GOG Giveaway detected: {0}";
 
 		internal static readonly string errorGetGameName = "Cannot fetch game name from: {0}, probably caused by poor internet connection.";
+
+		internal static readonly string debugCheckItchIOClaimable = "Checking whether itch.io free game is claimable";
+
+		internal static readonly string debugSteamIDNotDetected = "Skipping, no Steam App/Sub ID detected: {0}\n";
+		internal static readonly string debugItchIOCNotClaimable = "Skipping, not claimable: {0}\n";
+		internal static readonly string debugFoundInPreviousPage = "Skipping, found same record in other source: {0}\n";
 		#endregion
 	}
 }

@@ -6,7 +6,7 @@ namespace RedditFreeGamesNotifier.Models {
 
 		public List<FreeGameRecord> NotifyRecords { get; set; } = new List<FreeGameRecord>();
 
-		public List<FreeGameRecord> GOGGiveawayRecords { get; set; } = new List<FreeGameRecord>();
+		public bool HasGOGGiveaway { get; set; } = false;
 
 		public List<FreeGameRecord> SteamFreeGames { get; set; } = new List<FreeGameRecord>();
 	}

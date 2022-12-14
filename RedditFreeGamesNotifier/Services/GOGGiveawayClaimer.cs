@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using RedditFreeGamesNotifier.Models.Config;
-using RedditFreeGamesNotifier.Models.Record;
 using RedditFreeGamesNotifier.Strings;
 
 namespace RedditFreeGamesNotifier.Services {
@@ -11,13 +10,13 @@ namespace RedditFreeGamesNotifier.Services {
 			_logger = logger;
 		}
 
-		public async Task Claim(Config config, List<FreeGameRecord> records) {
+		public async Task Claim(Config config, bool HasGOGGiveaway) {
 			if (!config.EnableGOGAutoClaim) {
 				_logger.LogInformation(GOGAutoClaimerStrings.infoDisabled);
 				return;
 			}
 
-			if (records.Count == 0) {
+			if (!HasGOGGiveaway) {
 				_logger.LogInformation(GOGAutoClaimerStrings.infoNoRecords);
 				return;
 			}
@@ -25,23 +24,18 @@ namespace RedditFreeGamesNotifier.Services {
 			try {
 				_logger.LogDebug(GOGAutoClaimerStrings.debugClaim);
 
-				var httpClient = new HttpClient();
+				using var httpClient = new HttpClient();
+				var request = new HttpRequestMessage() {
+					Method = HttpMethod.Get,
+					RequestUri = new Uri(GOGAutoClaimerStrings.Url),
+					Headers = {
+						{ GOGAutoClaimerStrings.UAKey, GOGAutoClaimerStrings.UAValue },
+						{ GOGAutoClaimerStrings.CookieKey, config.Cookie }
+					}
+				};
+				var resp = await httpClient.SendAsync(request);
 
-				foreach (var record in records) {
-					_logger.LogInformation(GOGAutoClaimerStrings.infoClaiming, record.Name);
-					
-					var request = new HttpRequestMessage() {
-						Method = HttpMethod.Get,
-						RequestUri = new Uri(GOGAutoClaimerStrings.Url),
-						Headers = {
-							{ GOGAutoClaimerStrings.UAKey, GOGAutoClaimerStrings.UAValue },
-							{ GOGAutoClaimerStrings.CookieKey, config.Cookie }
-						}
-					};
-					var resp = await httpClient.SendAsync(request);
-
-					_logger.LogDebug(await resp.Content.ReadAsStringAsync());
-				}
+				_logger.LogDebug(await resp.Content.ReadAsStringAsync());
 
 				_logger.LogDebug($"Done: {GOGAutoClaimerStrings.debugClaim}");
 			} catch (Exception) {

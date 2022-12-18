@@ -145,7 +145,7 @@ namespace RedditFreeGamesNotifier.Services {
 		}
 
 		private async Task<bool> IsClaimable(string url) {
-			var result = true;
+			bool result;
 
 			try {
 				_logger.LogDebug($"{ParseStrings.debugCheckItchIOClaimable} | {url}");
@@ -164,6 +164,8 @@ namespace RedditFreeGamesNotifier.Services {
 				return result;
 			} catch (Exception) {
 				_logger.LogError($"Error: {ParseStrings.debugCheckItchIOClaimable}");
+
+				result = false;
 
 				return result;
 			}

@@ -22,6 +22,7 @@ namespace RedditFreeGamesNotifier.Strings {
 
 		internal static readonly string steamAppDetailGameNameKey = "name";
 		internal static readonly string gogGiveawayUrlKeyword = "#giveaway";
+		internal static readonly string gogGiveawayUrlEndKeyword = "gog.com";
 
 		internal static readonly string gogAllGamesPageTitle = "DRM-free | GOG.COM";
 

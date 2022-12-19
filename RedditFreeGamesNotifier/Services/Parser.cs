@@ -141,7 +141,7 @@ namespace RedditFreeGamesNotifier.Services {
 		}
 
 		private static bool IsGOGGiveaway(string url) {
-			return url.Contains(ParseStrings.gogGiveawayUrlKeyword);
+			return url.Contains(ParseStrings.gogGiveawayUrlKeyword) || url.TrimEnd('/').EndsWith(ParseStrings.gogGiveawayUrlEndKeyword);
 		}
 
 		private async Task<bool> IsClaimable(string url) {

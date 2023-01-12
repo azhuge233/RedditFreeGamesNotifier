@@ -149,7 +149,9 @@ namespace RedditFreeGamesNotifier.Services {
 					var source = await services.GetRequiredService<Scraper>().GetSource(appDetailsUrl);
 					var json = JsonSerializer.Deserialize<Dictionary<string, AppDetails>>(source);
 
-					gameName = json[appId].Data[ParseStrings.steamAppDetailGameNameKey].ToString();
+					if (json[appId].Success)
+						gameName = json[appId].Data[ParseStrings.steamAppDetailGameNameKey].ToString();
+					else _logger.LogDebug(ParseStrings.debugSteamApiGetNameFailed, appId);
 				}
 
 				_logger.LogDebug($"Done: {ParseStrings.debugGetGameNameWithUrl}", record.Url);

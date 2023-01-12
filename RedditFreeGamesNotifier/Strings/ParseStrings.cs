@@ -58,6 +58,7 @@ namespace RedditFreeGamesNotifier.Strings {
 
 		internal static readonly string debugIsGOGGiveaway = "GOG Giveaway detected: {0}";
 
+		internal static readonly string debugSteamApiGetNameFailed = "Steam App Detail API for game ID {0} returned failed success code.";
 		internal static readonly string errorGetGameName = "Cannot fetch game name from: {0}, probably caused by poor internet connection.";
 
 		internal static readonly string debugCheckItchIOClaimable = "Checking whether itch.io free game is claimable";

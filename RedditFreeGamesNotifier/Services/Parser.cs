@@ -35,6 +35,8 @@ namespace RedditFreeGamesNotifier.Services {
 						var spans = div.SelectNodes(ParseStrings.redditEndedPXPath);
 						var spanInnerText = spans.Count > 1 ? div.SelectSingleNode(ParseStrings.redditEndedSpanXPath).InnerText.ToLower() : string.Empty;
 						var dataDomain = div.Attributes[ParseStrings.dataDomainKey].Value;
+
+						// Check if post is in supported game platform list
 						if (ParseStrings.ignoreKeywords.Contains(spanInnerText) || !ParseStrings.SupportedPlatform.Keys.Any(dataDomain.EndsWith)) continue;
 
 						if (dataDomain.EndsWith("itch.io")) dataDomain = "itch.io";
@@ -47,20 +49,37 @@ namespace RedditFreeGamesNotifier.Services {
 						var redditLink = new StringBuilder().Append(ParseStrings.redditUrl).Append(dataPermaLink).ToString();
 						var appId = GetGameId(dataUrl);
 
+						#region check free game validation 
+						// Skip if found in other subreddits
 						if (result.Records.Any(record => record.Url == dataUrl)) {
 							_logger.LogDebug(ParseStrings.debugFoundInPreviousPage, dataUrl);
 							continue;
 						}
-						if (platform == "Steam" && appId == string.Empty) {
-							_logger.LogDebug(ParseStrings.debugSteamIDNotDetected, dataUrl);
-							continue;
+
+						///Platform sepicific
+						// Steam
+						if (platform == "Steam") {
+							// no app/sub id
+							if (appId == string.Empty) {
+								_logger.LogDebug(ParseStrings.debugSteamIDNotDetected, dataUrl);
+								continue;
+							}
+
+							// found in other subreddits
+							if (result.Records.Any(record => record.AppId == appId)) {
+								_logger.LogDebug(ParseStrings.debugSteamIDDuplicationDetected, dataUrl);
+								continue;
+							}
 						}
+
+						//Itchio
 						if (platform == "Itch.io" && !await IsClaimable(dataUrl)) {
 							_logger.LogDebug(ParseStrings.debugItchIOCNotClaimable, dataUrl);
 							continue;
 						}
+						#endregion
 
-						_logger.LogDebug($"{dataUrl} | {redditLink} | {platform} | {appId}");
+						_logger.LogDebug($"{dataUrl} | {redditLink} | {platform} | {appId}\n");
 
 						var newRecord = new FreeGameRecord() { 
 							Url = dataUrl,
@@ -72,6 +91,7 @@ namespace RedditFreeGamesNotifier.Services {
 
 						result.Records.Add(newRecord);
 
+						#region decide if it needs to be notified
 						if (!oldRecords.Any(record => record.RedditUrl == newRecord.RedditUrl || record.Url == newRecord.Url)) {
 							_logger.LogInformation(ParseStrings.infoFoundNewGame, newRecord.Name);
 
@@ -80,6 +100,7 @@ namespace RedditFreeGamesNotifier.Services {
 
 							result.NotifyRecords.Add(newRecord);
 						} else _logger.LogDebug(ParseStrings.debugFoundInOldRecords, newRecord.Name);
+						#endregion
 					}
 					_logger.LogDebug($"{ParseStrings.debugParseWithUrl}", pair.Key);
 				}

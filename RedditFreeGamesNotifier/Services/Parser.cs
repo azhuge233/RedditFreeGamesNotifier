@@ -102,7 +102,7 @@ namespace RedditFreeGamesNotifier.Services {
 						} else _logger.LogDebug(ParseStrings.debugFoundInOldRecords, newRecord.Name);
 						#endregion
 					}
-					_logger.LogDebug($"{ParseStrings.debugParseWithUrl}", pair.Key);
+					_logger.LogDebug($"Done: {ParseStrings.debugParseWithUrl}", pair.Key);
 				}
 
 				_logger.LogDebug($"Done: {ParseStrings.debugParse}");

@@ -4,9 +4,9 @@
 			"https://old.reddit.com/r/FreeGamesOnSteam/new/",
 			"https://old.reddit.com/r/FreeGameFindings/new/",
 			"https://old.reddit.com/r/freegames/new/",
-			"https://old.reddit.com/r/FreeGamesOnSteam/",
-			"https://old.reddit.com/r/FreeGameFindings/",
-			"https://old.reddit.com/r/freegames/"
+			//"https://old.reddit.com/r/FreeGamesOnSteam/",
+			//"https://old.reddit.com/r/FreeGameFindings/",
+			//"https://old.reddit.com/r/freegames/"
 		};
 
 		#region debug strings

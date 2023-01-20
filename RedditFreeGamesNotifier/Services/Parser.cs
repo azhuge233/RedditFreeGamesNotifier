@@ -32,6 +32,7 @@ namespace RedditFreeGamesNotifier.Services {
 					var divs = htmlDoc.DocumentNode.SelectNodes(ParseStrings.redditDivXPath).ToList();
 
 					foreach (var div in divs) {
+						#region get game info
 						var spans = div.SelectNodes(ParseStrings.redditEndedPXPath);
 						var spanInnerText = spans.Count > 1 ? div.SelectSingleNode(ParseStrings.redditEndedSpanXPath).InnerText.ToLower() : string.Empty;
 						var dataDomain = div.Attributes[ParseStrings.dataDomainKey].Value;
@@ -48,8 +49,9 @@ namespace RedditFreeGamesNotifier.Services {
 						var platform = ParseStrings.SupportedPlatform[dataDomain];
 						var redditLink = new StringBuilder().Append(ParseStrings.redditUrl).Append(dataPermaLink).ToString();
 						var appId = GetGameId(dataUrl);
+						#endregion
 
-						#region check free game validation 
+						#region check free game duplication in other sources, old records must NOT included
 						// Skip if found in other subreddits
 						if (result.Records.Any(record => record.Url == dataUrl)) {
 							_logger.LogDebug(ParseStrings.debugFoundInPreviousPage, dataUrl);
@@ -71,7 +73,9 @@ namespace RedditFreeGamesNotifier.Services {
 								continue;
 							}
 						}
+						#endregion
 
+						#region free game validation
 						//Itchio
 						if (platform == "Itch.io" && !await IsClaimable(dataUrl)) {
 							_logger.LogDebug(ParseStrings.debugItchIOCNotClaimable, dataUrl);
@@ -91,8 +95,11 @@ namespace RedditFreeGamesNotifier.Services {
 
 						result.Records.Add(newRecord);
 
-						#region decide if it needs to be notified
-						if (!oldRecords.Any(record => record.RedditUrl == newRecord.RedditUrl || record.Url == newRecord.Url)) {
+						#region notification list
+						if (!oldRecords.Any(record => record.RedditUrl == newRecord.RedditUrl || 
+							record.Url == newRecord.Url || 
+							(record.Platform == "Steam" && record.AppId == newRecord.AppId))) {
+
 							_logger.LogInformation(ParseStrings.infoFoundNewGame, newRecord.Name);
 
 							if (newRecord.Platform == "Steam" && !string.IsNullOrEmpty(newRecord.AppId)) result.SteamFreeGames.Add(newRecord);

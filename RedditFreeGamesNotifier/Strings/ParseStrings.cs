@@ -49,7 +49,7 @@ namespace RedditFreeGamesNotifier.Strings {
 
 		#region debug strings
 		internal static readonly string debugParse = "Parse";
-		internal static readonly string debugParseWithUrl = "Parsing: {0}";
+		internal static readonly string debugParseWithUrl = "Parsing: {0}\n\n";
 		internal static readonly string debugGetGameName = "GetGameName";
 		internal static readonly string debugGetGameNameWithUrl = "GetGameName: {0}";
 

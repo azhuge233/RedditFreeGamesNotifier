@@ -48,6 +48,7 @@ namespace RedditFreeGamesNotifier.Services {
 
 						var platform = ParseStrings.SupportedPlatform[dataDomain];
 						var redditLink = new StringBuilder().Append(ParseStrings.redditUrl).Append(dataPermaLink).ToString();
+						var isGOGGiveaway = platform == "GOG" && IsGOGGiveaway(dataUrl);
 						var appId = GetGameId(dataUrl);
 						#endregion
 
@@ -76,7 +77,7 @@ namespace RedditFreeGamesNotifier.Services {
 
 						// GOG
 						if (platform == "GOG") {
-							if (result.HasGOGGiveaway && IsGOGGiveaway(dataUrl)) {
+							if (result.Records.Any(record => record.IsGOGGiveaway == true) && isGOGGiveaway) {
 								_logger.LogDebug(ParseStrings.debugGOGGiveawayDuplication, dataUrl);
 								continue;
 							}
@@ -97,7 +98,8 @@ namespace RedditFreeGamesNotifier.Services {
 							Url = dataUrl,
 							RedditUrl = redditLink,
 							Platform = platform,
-							AppId = appId
+							AppId = appId,
+							IsGOGGiveaway = isGOGGiveaway
 						};
 						newRecord.Name = await GetGameName(newRecord, redditTitle);
 
@@ -111,7 +113,7 @@ namespace RedditFreeGamesNotifier.Services {
 							_logger.LogInformation(ParseStrings.infoFoundNewGame, newRecord.Name);
 
 							if (newRecord.Platform == "Steam" && !string.IsNullOrEmpty(newRecord.AppId)) result.SteamFreeGames.Add(newRecord);
-							else if (newRecord.Platform == "GOG" && IsGOGGiveaway(newRecord.Url)) result.HasGOGGiveaway = true;
+							else if (newRecord.Platform == "GOG" && newRecord.IsGOGGiveaway) result.HasGOGGiveaway = true;
 
 							result.NotifyRecords.Add(newRecord);
 						} else _logger.LogDebug(ParseStrings.debugFoundInOldRecords, newRecord.Name);
@@ -143,7 +145,7 @@ namespace RedditFreeGamesNotifier.Services {
 				if (record.Platform == "GOG") {
 					_logger.LogDebug(ParseStrings.debugGetGameNameWithUrl, record.Url);
 
-					if (!IsGOGGiveaway(record.Url)) {
+					if (!record.IsGOGGiveaway) {
 						var source = await services.GetRequiredService<Scraper>().GetSource(record.Url);
 						var htmlDoc = new HtmlDocument();
 						htmlDoc.LoadHtml(source);

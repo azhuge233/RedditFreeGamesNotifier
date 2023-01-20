@@ -5,6 +5,7 @@
 		public string RedditUrl { get; set; }
 		public string Platform { get; set; }
 		public string AppId { get; set; }
+		public bool IsGOGGiveaway { get; set; } = false;
 
 		public FreeGameRecord() { }
 
@@ -14,6 +15,7 @@
 			RedditUrl = record.RedditUrl;
 			Platform = record.Platform;
 			AppId = record.AppId;
+			IsGOGGiveaway = record.IsGOGGiveaway;
 		}
 	}
 }

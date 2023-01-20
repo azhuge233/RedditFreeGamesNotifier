@@ -63,6 +63,9 @@ namespace RedditFreeGamesNotifier.Strings {
 
 		internal static readonly string debugCheckItchIOClaimable = "Checking whether itch.io free game is claimable";
 
+		internal static readonly string debugGOGGiveawayDuplication = "Skipping, same GOG giveaway was found in other source: {0}\n";
+
+		internal static readonly string debugSteamIDDuplicationInOldRecord = "Skipping, same App/Sub ID was found in old records: {0}\n";
 		internal static readonly string debugSteamIDNotDetected = "Skipping, no Steam App/Sub ID detected: {0}\n";
 		internal static readonly string debugSteamIDDuplicationDetected = "Skipping, same App/Sub ID was found in other source: {0}\n";
 

@@ -73,6 +73,14 @@ namespace RedditFreeGamesNotifier.Services {
 								continue;
 							}
 						}
+
+						// GOG
+						if (platform == "GOG") {
+							if (result.HasGOGGiveaway && IsGOGGiveaway(dataUrl)) {
+								_logger.LogDebug(ParseStrings.debugGOGGiveawayDuplication, dataUrl);
+								continue;
+							}
+						}
 						#endregion
 
 						#region free game validation
@@ -98,7 +106,7 @@ namespace RedditFreeGamesNotifier.Services {
 						#region notification list
 						if (!oldRecords.Any(record => record.RedditUrl == newRecord.RedditUrl || 
 							record.Url == newRecord.Url || 
-							(record.Platform == "Steam" && record.AppId == newRecord.AppId))) {
+							(newRecord.Platform == "Steam" && record.AppId == newRecord.AppId) )) {
 
 							_logger.LogInformation(ParseStrings.infoFoundNewGame, newRecord.Name);
 

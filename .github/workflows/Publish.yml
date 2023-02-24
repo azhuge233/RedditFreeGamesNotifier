@@ -27,7 +27,7 @@ jobs:
     - name: Publish
       run: |
         dotnet restore
-        dotnet publish -c release -r win-x64 -o bin/release/win-x64 -p:PublishSingleFile=true --sc
+        dotnet publish -c release -r win-x64 -p:PublishDir="$GITHUB_WORKSPACE/bin/release/win-x64" -p:PublishSingleFile=true --sc
       
     - name: Install Zip
       uses: montudor/action-zip@v1

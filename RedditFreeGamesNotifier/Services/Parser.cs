@@ -81,6 +81,12 @@ namespace RedditFreeGamesNotifier.Services {
 								_logger.LogDebug(ParseStrings.debugGOGGiveawayDuplication, dataUrl);
 								continue;
 							}
+
+							// fix some gog links with store region word (like 'en') but points to the same game
+							if (result.Records.Any(record => record.Url.EndsWith(dataUrl.Split('/').Last()))) {
+								_logger.LogDebug(ParseStrings.debugGOGDuplication, dataUrl);
+								continue;
+							}
 						}
 						#endregion
 
@@ -154,7 +160,7 @@ namespace RedditFreeGamesNotifier.Services {
 						// If the page title ends with "DRM-free | GOG.COM" means the link is bad, return reddit Title instead
 						var gogTitle = htmlDoc.DocumentNode.SelectSingleNode(ParseStrings.gogTitleXPath).InnerText;
 						if (!gogTitle.Contains(ParseStrings.gogAllGamesPageTitle))
-							gameName = htmlDoc.DocumentNode.SelectSingleNode(ParseStrings.gogGameTitleXPath).InnerText;
+							gameName = htmlDoc.DocumentNode.SelectSingleNode(ParseStrings.gogGameTitleXPath).InnerText.Trim();
 					} else _logger.LogDebug(ParseStrings.debugIsGOGGiveaway, record.Url);
 				}
 

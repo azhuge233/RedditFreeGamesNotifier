@@ -9,6 +9,7 @@ namespace RedditFreeGamesNotifier.Services {
 
 		public Scraper(ILogger<Scraper> logger) {
 			_logger = logger;
+			Client.DefaultRequestHeaders.Add("User-Agent", ScrapeStrings.UAs[new Random().Next(0, ScrapeStrings.UAs.Length - 1)]);
 		}
 
 		internal async Task<Dictionary<string, string>> GetSource() {

@@ -156,10 +156,15 @@ namespace RedditFreeGamesNotifier.Services {
 						var htmlDoc = new HtmlDocument();
 						htmlDoc.LoadHtml(source);
 
-						// Fixes some bad links skip to GOG's all games page, causes fetch game name error
-						// If the page title ends with "DRM-free | GOG.COM" means the link is bad, return reddit Title instead
+						/// Fixes some gog redirection links, causes fetch game name error:
+						///		- If the page title contains "DRM-free | GOG.COM" means the link is redirected to all game page
+						///		- If the page title contains "GOG.COM | GOG.COM" means the link is redirected to GOG's main page
+						/// Under above circumstances, return reddit Title instead
 						var gogTitle = htmlDoc.DocumentNode.SelectSingleNode(ParseStrings.gogTitleXPath).InnerText;
-						if (!gogTitle.Contains(ParseStrings.gogAllGamesPageTitle))
+						_logger.LogDebug($"GOG Title: {gogTitle}");
+
+						if (!gogTitle.Contains(ParseStrings.gogAllGamesPageTitle) && 
+							!gogTitle.Contains(ParseStrings.gogRedirectedToMainPageTitle))
 							gameName = htmlDoc.DocumentNode.SelectSingleNode(ParseStrings.gogGameTitleXPath).InnerText.Trim();
 					} else _logger.LogDebug(ParseStrings.debugIsGOGGiveaway, record.Url);
 				}

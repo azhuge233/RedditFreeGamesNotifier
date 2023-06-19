@@ -25,6 +25,7 @@ namespace RedditFreeGamesNotifier.Strings {
 		internal static readonly string gogGiveawayUrlEndKeyword = "gog.com";
 
 		internal static readonly string gogAllGamesPageTitle = "DRM-free | GOG.COM";
+		internal static readonly string gogRedirectedToMainPageTitle = "GOG.COM | GOG.COM";
 
 		#region Xpaths
 		internal static readonly string redditDivXPath = @".//div[contains(@class, 'thing') and contains(@class, 'link')]";

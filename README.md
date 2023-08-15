@@ -19,7 +19,7 @@ Install dotnet 7.0 SDK first, you can find installation packages/guides [here](h
 ```shell
 git clone https://github.com/azhuge233/RedditFreeGamesNotifier.git
 cd RedditFreeGamesNotifier
-dotnet publish -c Release -o /your/path/here -r [win-x64/osx-x64/...] --sc
+dotnet publish -c Release -p:PublishDir=/your/path/here -r [win-x64/osx-x64/...] --sc
 ```
 
 ## Usage

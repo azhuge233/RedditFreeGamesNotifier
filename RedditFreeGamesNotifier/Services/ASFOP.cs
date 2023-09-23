@@ -54,6 +54,7 @@ namespace RedditFreeGamesNotifier.Services {
 
 				var client = new HttpClient();
 				client.DefaultRequestHeaders.Add("Authentication", config.ASFIPCPassword);
+				client.DefaultRequestHeaders.Add(ASFStrings.UAKey, ASFStrings.UAValue);
 
 				var url = new StringBuilder().AppendFormat(ASFStrings.commandUrl, config.ASFIPCUrl).ToString();
 				var content = new StringContent(JsonSerializer.Serialize(new AddlicenssPostContent() { Command = $"{ASFStrings.addlicenseCommand}{GenerateSubIDString(gameList)}" }), Encoding.UTF8, "application/json");

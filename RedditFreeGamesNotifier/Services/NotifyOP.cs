@@ -4,6 +4,7 @@ using RedditFreeGamesNotifier.Models.Config;
 using RedditFreeGamesNotifier.Models.Record;
 using RedditFreeGamesNotifier.Modules;
 using RedditFreeGamesNotifier.Services.Notifier;
+using Telegram.Bot.Types;
 
 namespace RedditFreeGamesNotifier.Services {
 	internal class NotifyOP : IDisposable {
@@ -65,6 +66,12 @@ namespace RedditFreeGamesNotifier.Services {
 					_logger.LogInformation(debugEnabledFormat, "QQ");
 					await services.GetRequiredService<QQ>().SendMessage(config, pushListFinal);
 				} else _logger.LogInformation(debugDisabledFormat, "QQ");
+
+				//QQ Red (Chronocat) notifications
+				if (config.EnableRed) {
+					_logger.LogInformation(debugEnabledFormat, "QQ Red (Chronocat)");
+					await services.GetRequiredService<QQRed>().SendMessage(config, pushListFinal);
+				} else _logger.LogInformation(debugDisabledFormat, "QQ Red (Chronocat)");
 
 				// PushPlus notifications
 				if (config.EnablePushPlus) {

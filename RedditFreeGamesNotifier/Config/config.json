@@ -18,6 +18,12 @@
   "EnableQQ": false,
   "QQAddress": "127.0.0.1",
   "QQPort": 5700,
+
+  "EnableRed": false,
+  "RedAddress": "127.0.0.1",
+  "RedPort": 16530,
+  "RedToken": "",
+
   "ToQQID": "",
 
   "EnablePushPlus": false,
@@ -38,5 +44,5 @@
   "NotifyASFResult": false,
 
   "EnableGOGAutoClaim": false,
-  "Cookie":  ""
+  "Cookie": ""
 }

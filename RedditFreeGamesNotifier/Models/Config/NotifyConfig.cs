@@ -20,6 +20,10 @@
 		public bool EnableQQ { get; set; }
 		public string QQAddress { get; set; }
 		public int QQPort { get; set; }
+		public bool EnableRed { get; set; }
+		public string RedAddress { get; set; }
+		public int RedPort { get; set; }
+		public string RedToken { get; set; }
 		public string ToQQID { get; set; }
 
 		public bool EnablePushPlus { get; set; }

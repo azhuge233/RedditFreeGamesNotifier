@@ -57,6 +57,18 @@ namespace RedditFreeGamesNotifier.Services {
 						throw new Exception(message: "No QQ ID provided!");
 				}
 
+				//QQ Red (Chronocat)
+				if (config.EnableRed) {
+					if (string.IsNullOrEmpty(config.RedAddress))
+						throw new Exception(message: "No Red address provided!");
+					if (string.IsNullOrEmpty(config.RedPort.ToString()))
+						throw new Exception(message: "No Red port provided!");
+					if (string.IsNullOrEmpty(config.RedToken))
+						throw new Exception(message: "No Red token provided!");
+					if (string.IsNullOrEmpty(config.ToQQID))
+						throw new Exception(message: "No QQ ID provided!");
+				}
+
 				//PushPlus
 				if (config.EnablePushPlus) {
 					if (string.IsNullOrEmpty(config.PushPlusToken))

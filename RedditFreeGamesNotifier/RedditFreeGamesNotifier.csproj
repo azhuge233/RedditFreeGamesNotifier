@@ -6,6 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
 		<PublishSingleFile>true</PublishSingleFile>
 		<PublishTrimmed>false</PublishTrimmed>
+		<SelfContained>true</SelfContained>
+		<EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
 		<DebugType>none</DebugType>
 		<DebugSymbols>false</DebugSymbols>
   </PropertyGroup>

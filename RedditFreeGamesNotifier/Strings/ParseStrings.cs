@@ -26,6 +26,7 @@ namespace RedditFreeGamesNotifier.Strings {
 
 		internal static readonly string gogAllGamesPageTitle = "DRM-free | GOG.COM";
 		internal static readonly string gogRedirectedToMainPageTitle = "GOG.COM | GOG.COM";
+		internal static readonly string gogFreePartnerUrl = "https://www.gog.com/partner/free_games";
 
 		#region Xpaths
 		internal static readonly string redditDivXPath = @".//div[contains(@class, 'thing') and contains(@class, 'link')]";
@@ -66,6 +67,7 @@ namespace RedditFreeGamesNotifier.Strings {
 
 		internal static readonly string debugGOGGiveawayDuplication = "Skipping, same GOG giveaway was found in other source: {0}\n";
 		internal static readonly string debugGOGDuplication = "Skipping, same GOG game was found in other source: {0}\n";
+		internal static readonly string debugGOGFreePartnerPage = "Skipping, GOG free partner page detected: {0}\n";
 
 		internal static readonly string debugSteamIDDuplicationInOldRecord = "Skipping, same App/Sub ID was found in old records: {0}\n";
 		internal static readonly string debugSteamIDNotDetected = "Skipping, no Steam App/Sub ID detected: {0}\n";

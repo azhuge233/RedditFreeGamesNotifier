@@ -48,8 +48,12 @@ namespace RedditFreeGamesNotifier.Services {
 
 						var platform = ParseStrings.SupportedPlatform[dataDomain];
 						var redditLink = new StringBuilder().Append(ParseStrings.redditUrl).Append(dataPermaLink).ToString();
+
 						var isGOGGiveaway = platform == "GOG" && IsGOGGiveaway(dataUrl);
+
 						var appId = GetGameId(dataUrl);
+						var subId = string.Empty;
+						AppDetails steamAppDetails = null;
 						#endregion
 
 						#region check free game duplication in other sources, old records must NOT included
@@ -69,7 +73,7 @@ namespace RedditFreeGamesNotifier.Services {
 							}
 
 							// found in other subreddits
-							if (result.Records.Any(record => record.AppId == appId)) {
+							if (result.Records.Any(record => record.AppId.Split(',').Contains(appId))) {
 								_logger.LogDebug(ParseStrings.debugSteamIDDuplicationDetected, dataUrl);
 								continue;
 							}
@@ -90,24 +94,29 @@ namespace RedditFreeGamesNotifier.Services {
 						}
 						#endregion
 
-						#region free game validation
+						#region extra validation and information gathering
 						//Itchio
 						if (platform == "Itch.io" && !await IsClaimable(dataUrl)) {
 							_logger.LogDebug(ParseStrings.debugItchIOCNotClaimable, dataUrl);
 							continue;
 						}
+
+						if (platform == "Steam") {
+							steamAppDetails = platform == "Steam" ? await GetSteamAppDetails(appId) : null;
+							subId = GetSteamSubID(steamAppDetails);
+						}
 						#endregion
 
 						_logger.LogDebug($"{dataUrl} | {redditLink} | {platform} | {appId}\n");
 
-						var newRecord = new FreeGameRecord() { 
+						var newRecord = new FreeGameRecord() {
 							Url = dataUrl,
 							RedditUrl = redditLink,
 							Platform = platform,
-							AppId = appId,
+							AppId = string.IsNullOrEmpty(subId) ? appId : $"{appId},{subId}",
 							IsGOGGiveaway = isGOGGiveaway
 						};
-						newRecord.Name = await GetGameName(newRecord, redditTitle);
+						newRecord.Name = await GetGameName(newRecord, steamAppDetails, redditTitle);
 
 						result.Records.Add(newRecord);
 
@@ -144,7 +153,27 @@ namespace RedditFreeGamesNotifier.Services {
 			return appIdMatch.Success ? appIdMatch.Value : subIdMatch.Success ? subIdMatch.Value : string.Empty;
 		}
 
-		private async Task<string> GetGameName(FreeGameRecord record, string redditTitle) {
+		private async Task<AppDetails> GetSteamAppDetails(string appId) {
+			try {
+				appId = appId.Split('/')[1];
+				var appDetailsUrl = ParseStrings.steamApiAppDetailsPrefix + appId;
+				_logger.LogDebug(ParseStrings.debugGetSteamAppDetails, appDetailsUrl);
+
+				var source = await services.GetRequiredService<Scraper>().GetSource(appDetailsUrl);
+				if(source == null || source == "null") return null;
+
+				var json = JsonSerializer.Deserialize<Dictionary<string, AppDetails>>(source);
+
+				_logger.LogDebug(ParseStrings.debugSteamApiFailed, appId);
+				return json[appId];
+			} catch (Exception ex) {
+				_logger.LogDebug(ParseStrings.errorGetSteamAppDetails, appId);
+				_logger.LogDebug(ex.Message);
+				return null;
+			}
+		}
+
+		private async Task<string> GetGameName(FreeGameRecord record, AppDetails appDetails, string redditTitle) {
 			try {
 				var gameName = redditTitle;
 
@@ -175,16 +204,8 @@ namespace RedditFreeGamesNotifier.Services {
 				}
 
 				if (record.Platform == "Steam") {
-					var appId = record.AppId.Split('/')[1];
-					var appDetailsUrl = ParseStrings.steamApiurlPrefix + appId;
-					_logger.LogDebug(ParseStrings.debugGetGameNameWithUrl, appDetailsUrl);
-
-					var source = await services.GetRequiredService<Scraper>().GetSource(appDetailsUrl);
-					var json = JsonSerializer.Deserialize<Dictionary<string, AppDetails>>(source);
-
-					if (json[appId].Success)
-						gameName = json[appId].Data[ParseStrings.steamAppDetailGameNameKey].ToString();
-					else _logger.LogDebug(ParseStrings.debugSteamApiGetNameFailed, appId);
+					if (appDetails != null && appDetails.Success) gameName = appDetails.Data.Name;
+					else _logger.LogDebug(ParseStrings.debugGetGameNameAppDetailsFailed, record.AppId);
 				}
 
 				_logger.LogDebug($"Done: {ParseStrings.debugGetGameNameWithUrl}", record.Url);
@@ -193,6 +214,36 @@ namespace RedditFreeGamesNotifier.Services {
 				_logger.LogError(ParseStrings.errorGetGameName, record.Url);
 
 				return redditTitle;
+			}
+		}
+
+		private string GetSteamSubID(AppDetails appDetails) {
+			try {
+				_logger.LogDebug(ParseStrings.debugGetSteamSubID);
+
+				if (appDetails == null || !appDetails.Success) {
+					_logger.LogDebug(ParseStrings.debugGetSteamSubIDAppDetailsFailed);
+					return string.Empty;
+				}
+
+				var data = appDetails.Data;
+
+				if (data.Type == "dlc") {
+					if (data.PackageGroups != null && data.PackageGroups.Count > 0) {
+						var defaultPackageGroup = appDetails.Data.PackageGroups.First(pg => pg.Name == ParseStrings.steamAppDetailsGameTypeValueDefault);
+						var freeSubs = defaultPackageGroup.Subs.Where(sub => sub.IsFreeLicense == true).ToList();
+						var freeSubsIDString = string.Join(",", freeSubs.Select(sub => $"{ParseStrings.subIdPrefix}{sub.PackageID}"));
+
+						_logger.LogDebug(ParseStrings.debugGotSteamSubID, freeSubsIDString);
+						return freeSubsIDString;
+					}
+				} else _logger.LogDebug(ParseStrings.debugGetSteamSubIDNotDLC);
+
+				_logger.LogDebug(ParseStrings.debugGetSteamSubIDNoSubID);
+				return string.Empty;
+			} catch (Exception) {
+				_logger.LogError($"Error: {ParseStrings.debugGetSteamSubID}");
+				return string.Empty;
 			}
 		}
 

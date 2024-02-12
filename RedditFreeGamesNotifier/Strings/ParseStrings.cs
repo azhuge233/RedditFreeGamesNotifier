@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace RedditFreeGamesNotifier.Strings {
+﻿namespace RedditFreeGamesNotifier.Strings {
 	internal class ParseStrings {
 		internal static readonly Dictionary<string, string> SupportedPlatform = new() {
 			{ "store.steampowered.com", "Steam" },
@@ -15,12 +13,18 @@ namespace RedditFreeGamesNotifier.Strings {
 		};
 
 		internal static readonly string redditUrl = "https://old.reddit.com";
-		internal static readonly string steamApiurlPrefix = "https://store.steampowered.com/api/appdetails?appids=";
+		internal static readonly string steamApiAppDetailsPrefix = "https://store.steampowered.com/api/appdetails?filters=basic,packages&appids=";
 
 		internal static readonly string appIdRegex = @"app/[0-9]*";
 		internal static readonly string subIdRegex = @"sub/[0-9]*";
+		internal static readonly string subIdPrefix = "sub/";
 
-		internal static readonly string steamAppDetailGameNameKey = "name";
+		internal static readonly string steamAppDetailsGameTypeKey = "type";
+		internal static readonly string steamAppDetailsGameNameKey = "name";
+		internal static readonly string steamAppDetailsPackageGroupsKey = "package_groups";
+		internal static readonly string steamAppDetailsPackagesKey = "packages";
+		internal static readonly string steamAppDetailsGameTypeValueDefault = "default";
+
 		internal static readonly string gogGiveawayUrlKeyword = "#giveaway";
 		internal static readonly string gogGiveawayUrlEndKeyword = "gog.com";
 
@@ -52,15 +56,26 @@ namespace RedditFreeGamesNotifier.Strings {
 		#region debug strings
 		internal static readonly string debugParse = "Parse";
 		internal static readonly string debugParseWithUrl = "Parsing: {0}\n\n";
+
 		internal static readonly string debugGetGameName = "GetGameName";
 		internal static readonly string debugGetGameNameWithUrl = "GetGameName: {0}";
+		internal static readonly string debugGetGameNameAppDetailsFailed = "Get name name failed since Steam app details failed, appID: {0}";
+
+		internal static readonly string debugGetSteamSubID = "Get Steam Sub ID";
+		internal static readonly string debugGotSteamSubID = "Got Steam Sub ID: {0}";
+		internal static readonly string debugGetSteamSubIDNotDLC = "Not DLC, skip getting sub ID, returning app ID instead.";
+		internal static readonly string debugGetSteamSubIDNoSubID = "No sub ID detected, returning empty string.";
+		internal static readonly string debugGetSteamSubIDAppDetailsFailed = "Get sub ID failed since Steam app details failed.";
+
+		internal static readonly string debugGetSteamAppDetails = "GetSteamAppDetails: {0}";
 
 		internal static readonly string infoFoundNewGame = "Found new free game: {0}";
 		internal static readonly string debugFoundInOldRecords = "Found {0} in old records, stop adding to push list";
 
 		internal static readonly string debugIsGOGGiveaway = "GOG Giveaway detected: {0}";
 
-		internal static readonly string debugSteamApiGetNameFailed = "Steam App Detail API for game ID {0} returned failed success code.";
+		internal static readonly string debugSteamApiFailed = "Steam App Detail API for game ID {0} returned failed success code.";
+		internal static readonly string errorGetSteamAppDetails = "Cannot get steam app details, app ID: {0}";
 		internal static readonly string errorGetGameName = "Cannot fetch game name from: {0}, probably caused by poor internet connection.";
 
 		internal static readonly string debugCheckItchIOClaimable = "Checking whether itch.io free game is claimable";

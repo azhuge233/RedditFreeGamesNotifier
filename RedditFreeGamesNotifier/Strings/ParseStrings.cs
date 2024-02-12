@@ -17,6 +17,7 @@
 
 		internal static readonly string appIdRegex = @"app/[0-9]*";
 		internal static readonly string subIdRegex = @"sub/[0-9]*";
+		internal static readonly string appIdPrefix = "app/";
 		internal static readonly string subIdPrefix = "sub/";
 
 		internal static readonly string steamAppDetailsGameTypeKey = "type";
@@ -65,6 +66,9 @@
 		internal static readonly string debugGotSteamSubID = "Got Steam Sub ID: {0}";
 		internal static readonly string debugGetSteamSubIDNotDLC = "Not DLC, skip getting sub ID, returning app ID instead.";
 		internal static readonly string debugGetSteamSubIDNoSubID = "No sub ID detected, returning empty string.";
+		internal static readonly string debugGetSteamSubIDMainGameAppID = "Getting main game AppID";
+		internal static readonly string debugGetSteamSubIDMainGameNotFree = "Main game for DLC app/{0} is not free, skipping";
+		internal static readonly string debugGetSteamSubIDMainGameAppDetailsFailed = "Get main game app ID failed since getting Steam app details failed.";
 		internal static readonly string debugGetSteamSubIDAppDetailsFailed = "Get sub ID failed since Steam app details failed.";
 
 		internal static readonly string debugGetSteamAppDetails = "GetSteamAppDetails: {0}";

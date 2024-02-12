@@ -102,8 +102,8 @@ namespace RedditFreeGamesNotifier.Services {
 						}
 
 						if (platform == "Steam") {
-							steamAppDetails = platform == "Steam" ? await GetSteamAppDetails(appId) : null;
-							subId = GetSteamSubID(steamAppDetails);
+							steamAppDetails = platform == "Steam" ? await GetSteamAppDetails(appId.Split('/')[1]) : null;
+							subId = await GetSteamSubID(steamAppDetails);
 						}
 						#endregion
 
@@ -155,7 +155,6 @@ namespace RedditFreeGamesNotifier.Services {
 
 		private async Task<AppDetails> GetSteamAppDetails(string appId) {
 			try {
-				appId = appId.Split('/')[1];
 				var appDetailsUrl = ParseStrings.steamApiAppDetailsPrefix + appId;
 				_logger.LogDebug(ParseStrings.debugGetSteamAppDetails, appDetailsUrl);
 
@@ -217,13 +216,14 @@ namespace RedditFreeGamesNotifier.Services {
 			}
 		}
 
-		private string GetSteamSubID(AppDetails appDetails) {
+		private async Task<string> GetSteamSubID(AppDetails appDetails) {
 			try {
 				_logger.LogDebug(ParseStrings.debugGetSteamSubID);
+				string freeSubsIDString = string.Empty;
 
 				if (appDetails == null || !appDetails.Success) {
 					_logger.LogDebug(ParseStrings.debugGetSteamSubIDAppDetailsFailed);
-					return string.Empty;
+					return freeSubsIDString;
 				}
 
 				var data = appDetails.Data;
@@ -232,15 +232,22 @@ namespace RedditFreeGamesNotifier.Services {
 					if (data.PackageGroups != null && data.PackageGroups.Count > 0) {
 						var defaultPackageGroup = appDetails.Data.PackageGroups.First(pg => pg.Name == ParseStrings.steamAppDetailsGameTypeValueDefault);
 						var freeSubs = defaultPackageGroup.Subs.Where(sub => sub.IsFreeLicense == true).ToList();
-						var freeSubsIDString = string.Join(",", freeSubs.Select(sub => $"{ParseStrings.subIdPrefix}{sub.PackageID}"));
-
+						freeSubsIDString = string.Join(",", freeSubs.Select(sub => $"{ParseStrings.subIdPrefix}{sub.PackageID}"));
 						_logger.LogDebug(ParseStrings.debugGotSteamSubID, freeSubsIDString);
-						return freeSubsIDString;
 					}
+
+					_logger.LogDebug(ParseStrings.debugGetSteamSubIDMainGameAppID);
+					var fullGameAppDetails = await GetSteamAppDetails(data.FullGame.AppID);
+					if (fullGameAppDetails != null && fullGameAppDetails.Success) {
+						if (fullGameAppDetails.Data.IsFree) {
+							var mainGameAppIdString = $"{ParseStrings.appIdPrefix}{fullGameAppDetails.Data.SteamAppID}";
+							freeSubsIDString = string.IsNullOrEmpty(freeSubsIDString) ? mainGameAppIdString : string.Join(",", freeSubsIDString, mainGameAppIdString);
+						} else _logger.LogDebug(ParseStrings.debugGetSteamSubIDMainGameNotFree, data.SteamAppID);
+					} else _logger.LogDebug(ParseStrings.debugGetSteamSubIDMainGameAppDetailsFailed);
 				} else _logger.LogDebug(ParseStrings.debugGetSteamSubIDNotDLC);
 
 				_logger.LogDebug(ParseStrings.debugGetSteamSubIDNoSubID);
-				return string.Empty;
+				return freeSubsIDString;
 			} catch (Exception) {
 				_logger.LogError($"Error: {ParseStrings.debugGetSteamSubID}");
 				return string.Empty;

@@ -16,14 +16,28 @@ namespace RedditFreeGamesNotifier.Models.SteamApi {
 		[JsonPropertyName("name")]
 		public string Name { get; set; }
 
+		[JsonPropertyName("steam_appid")]
+		public int SteamAppID { get; set; }
+
 		[JsonPropertyName("is_free")]
 		public bool IsFree { get; set; }
+
+		[JsonPropertyName("fullgame")]
+		public FullGame FullGame { get; set; }
 
 		[JsonPropertyName("packages")]
 		public List<int> Packages { get; set; } = [];
 
 		[JsonPropertyName("package_groups")]
 		public List<PackageGroup> PackageGroups { get; set; } = [];
+	}
+
+	public class FullGame {
+		[JsonPropertyName("appid")]
+		public string AppID { get; set; }
+
+		[JsonPropertyName("name")]
+		public string Name { get; set; }
 	}
 
 	public class PackageGroup {

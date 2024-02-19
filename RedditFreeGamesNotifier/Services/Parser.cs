@@ -259,8 +259,6 @@ namespace RedditFreeGamesNotifier.Services {
 		}
 
 		private async Task<bool> IsClaimable(string url) {
-			bool result;
-
 			try {
 				_logger.LogDebug($"{ParseStrings.debugCheckItchIOClaimable} | {url}");
 
@@ -268,20 +266,16 @@ namespace RedditFreeGamesNotifier.Services {
 				var htmlDoc = new HtmlDocument();
 				htmlDoc.LoadHtml(source);
 
-				var buyButton = htmlDoc.DocumentNode.SelectSingleNode(ParseStrings.itchioBuyButtonXPath);
-				// var downloadButton = htmlDoc.DocumentNode.SelectSingleNode(ParseStrings.itchioDownloadButtonXPath);
+				var buyButtons = htmlDoc.DocumentNode.SelectNodes(ParseStrings.itchioBuyButtonXPath);
 
+				// var downloadButton = htmlDoc.DocumentNode.SelectSingleNode(ParseStrings.itchioDownloadButtonXPath);
 				//result = buyButton != null && downloadButton == null && buyButton.InnerText.Contains(ParseStrings.itchioDownloadOrClaimText);
-				result = buyButton != null && buyButton.InnerText.Contains(ParseStrings.itchioDownloadOrClaimText);
 
 				_logger.LogDebug($"Done: {ParseStrings.debugCheckItchIOClaimable}");
-				return result;
+				return buyButtons != null && buyButtons.Count > 0 && buyButtons.Any(button => button.InnerText.Contains(ParseStrings.itchioDownloadOrClaimText));
 			} catch (Exception) {
-				_logger.LogError($"Error: {ParseStrings.debugCheckItchIOClaimable}");
-
-				result = false;
-
-				return result;
+				_logger.LogError($"Error: {ParseStrings.debugCheckItchIOClaimable} - {url}");
+				return false;
 			}
 		}
 

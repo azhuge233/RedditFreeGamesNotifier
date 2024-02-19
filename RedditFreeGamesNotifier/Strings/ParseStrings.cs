@@ -33,6 +33,8 @@
 		internal static readonly string gogRedirectedToMainPageTitle = "GOG.COM | GOG.COM";
 		internal static readonly string gogFreePartnerUrl = "https://www.gog.com/partner/free_games";
 
+		internal static readonly string itchSalePageUrlPrefix = "https://itch.io/s/";
+
 		#region Xpaths
 		internal static readonly string redditDivXPath = @".//div[contains(@class, 'thing') and contains(@class, 'link')]";
 		internal static readonly string redditTitleLinkXPath = @".//div[contains(@class, 'entry')]//p[contains(@class, 'title')]//a[contains(@class, 'title')]";

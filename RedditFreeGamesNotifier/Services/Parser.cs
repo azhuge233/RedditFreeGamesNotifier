@@ -262,6 +262,8 @@ namespace RedditFreeGamesNotifier.Services {
 			try {
 				_logger.LogDebug($"{ParseStrings.debugCheckItchIOClaimable} | {url}");
 
+				if (url.StartsWith(ParseStrings.itchSalePageUrlPrefix)) return true;
+
 				var source = await services.GetRequiredService<Scraper>().GetSource(url);
 				var htmlDoc = new HtmlDocument();
 				htmlDoc.LoadHtml(source);
@@ -274,7 +276,7 @@ namespace RedditFreeGamesNotifier.Services {
 				_logger.LogDebug($"Done: {ParseStrings.debugCheckItchIOClaimable}");
 				return buyButtons != null && buyButtons.Count > 0 && buyButtons.Any(button => button.InnerText.Contains(ParseStrings.itchioDownloadOrClaimText));
 			} catch (Exception) {
-				_logger.LogError($"Error: {ParseStrings.debugCheckItchIOClaimable} - {url}");
+				_logger.LogError($"Error: {ParseStrings.debugCheckItchIOClaimable} | {url}");
 				return false;
 			}
 		}

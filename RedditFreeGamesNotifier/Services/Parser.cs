@@ -96,9 +96,25 @@ namespace RedditFreeGamesNotifier.Services {
 
 						#region extra validation and information gathering
 						//Itchio
-						if (platform == "Itch.io" && !await IsClaimable(dataUrl)) {
-							_logger.LogDebug(ParseStrings.debugItchIOCNotClaimable, dataUrl);
-							continue;
+						if (platform == "Itch.io") {
+							/// Solve notify duplication caused by network failing
+							/*	The Reason
+							 *	When network fails in 'IsClaimable()', 'IsClaimable()' will always return 'false'
+							 *	When a previously checked claimable game meets a failing network, this game will be removed from records
+							 *	So in the next successful run, the same game will be notified again 
+							*/
+							/*	The Solution
+							 *	Check old records first
+							 *	If it appears in old records, means that this current game is previously checked as a claimable game
+							 *	Therefore there's no need to check this 'previously checked claimable game' is claimable or not
+							 *	A claimable game will not calling 'IsClaimable()', so there will be no network failing, no notify duplication
+							*/
+							var isClaimable = oldRecords.Any(record => record.Url == dataUrl) || await IsClaimable(dataUrl);
+
+							if (!isClaimable) {
+								_logger.LogDebug(ParseStrings.debugItchIOCNotClaimable, dataUrl);
+								continue;
+							}
 						}
 
 						if (platform == "Steam") {

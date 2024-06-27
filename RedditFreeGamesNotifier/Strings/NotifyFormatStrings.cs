@@ -4,153 +4,153 @@
 		internal static readonly List<string> telegramPushFormat = new() {
 			"<b>{0}</b>\n\n" +
 			"App/Sub ID: <code><i>{1}</i></code>\n" +
-			"Steam 链接: <a href=\"{2}\" >{0}</a>\n" +
-			"Reddit 链接: {3}\n\n" +
+			"Steam Link: <a href=\"{2}\" >{0}</a>\n" +
+			"Reddit Link: {3}\n\n" +
 			"#Reddit #Steam #{4}",
 
 			"<b>{0}</b>\n\n" +
-			"GOG 链接: <a href=\"{1}\" >{0}</a>\n" +
-			"Reddit 链接: {2}\n\n" +
+			"GOG Link: <a href=\"{1}\" >{0}</a>\n" +
+			"Reddit Link: {2}\n\n" +
 			"#Reddit #GOG #{3}",
 
 			"<b>{0}</b>\n\n" +
-			"Itch.io 链接: {1}\n" +
-			"Reddit 链接: {2}\n\n" +
+			"Itch.io Link: {1}\n" +
+			"Reddit Link: {2}\n\n" +
 			"#Reddit #Itchio #{3}",
 
 			"<b>{0}</b>\n\n" +
-			"Ubisoft 链接: {1}\n" +
-			"Reddit 链接: {2}\n\n" +
+			"Ubisoft Link: {1}\n" +
+			"Reddit Link: {2}\n\n" +
 			"#Reddit #Ubisoft #{3}",
 		};
 
 		internal static readonly List<string> barkPushFormat = new() {
 			"{0}\n\n" +
 			"App/Sub ID: {1}\n" +
-			"Steam 链接: {2}\n" +
-			"Reddit 链接: {3}\n",
+			"Steam Link: {2}\n" +
+			"Reddit Link: {3}\n",
 
 			"{0}\n\n" +
-			"GOG 链接: {1}\n" +
-			"Reddit 链接: {2}\n",
+			"GOG Link: {1}\n" +
+			"Reddit Link: {2}\n",
 
 			"{0}\n\n" +
-			"Itch.io 链接: {1}\n" +
-			"Reddit 链接: {2}\n",
+			"Itch.io Link: {1}\n" +
+			"Reddit Link: {2}\n",
 
 			"{0}\n\n" +
-			"Ubisoft 链接: {1}\n" +
-			"Reddit 链接: {2}\n",
+			"Ubisoft Link: {1}\n" +
+			"Reddit Link: {2}\n",
 		};
 
 		internal static readonly List<string> emailPushHtmlFormat = new() {
 			"<p><b>{0}</b><br>" +
 			"App/Sub ID: {1}<br>" +
-			"Steam 链接: <a href=\"{2}\" > {0}</a><br>" +
-			"Reddit 链接: {3}<br>",
+			"Steam Link: <a href=\"{2}\" > {0}</a><br>" +
+			"Reddit Link: {3}<br>",
 
 			"<p><b>{0}</b><br>" +
-			"GOG 链接: <a href=\"{1}\" > {0}</a><br>" +
-			"Reddit 链接: {2}<br>",
+			"GOG Link: <a href=\"{1}\" > {0}</a><br>" +
+			"Reddit Link: {2}<br>",
 
 			"<p><b>{0}</b><br>" +
-			"Itch.io 链接: <a href=\"{1}\" > {0}</a><br>" +
-			"Reddit 链接: {2}<br>",
+			"Itch.io Link: <a href=\"{1}\" > {0}</a><br>" +
+			"Reddit Link: {2}<br>",
 
 			"<p><b>{0}</b><br>" +
-			"Ubisoft 链接: <a href=\"{1}\" > {0}</a><br>" +
-			"Reddit 链接: {2}<br>"
+			"Ubisoft Link: <a href=\"{1}\" > {0}</a><br>" +
+			"Reddit Link: {2}<br>"
 		};
 
 		internal static readonly List<string> qqPushFormat = new() {
 			"{0}\n\n" +
 			"App/Sub ID: {1}\n" +
-			"Steam 链接: {2}\n" +
-			"Reddit 链接: {3}\n",
+			"Steam Link: {2}\n" +
+			"Reddit Link: {3}\n",
 
 			"{0}\n\n" +
-			"GOG 链接: {1}\n" +
-			"Reddit 链接: {2}\n",
+			"GOG Link: {1}\n" +
+			"Reddit Link: {2}\n",
 
 			"{0}\n\n" +
-			"Itch.io 链接: {1}\n" +
-			"Reddit 链接: {2}\n",
+			"Itch.io Link: {1}\n" +
+			"Reddit Link: {2}\n",
 
 			"{0}\n\n" +
-			"Ubisoft 链接: {1}\n" +
-			"Reddit 链接: {2}\n"
+			"Ubisoft Link: {1}\n" +
+			"Reddit Link: {2}\n"
 		};
 
 		internal static readonly List<string> pushPlusPushHtmlFormat = new() {
 			"<p><b>{0}</b><br>" +
 			"App/Sub ID: {1}<br>" +
-			"Steam 链接: <a href=\"{2}\" > {0}</a><br>" +
-			"Reddit 链接: {3}<br>",
+			"Steam Link: <a href=\"{2}\" > {0}</a><br>" +
+			"Reddit Link: {3}<br>",
 
 			"<p><b>{0}</b><br>" +
-			"GOG 链接: <a href=\"{1}\" > {0}</a><br>" +
-			"Reddit 链接: {2}<br>",
+			"GOG Link: <a href=\"{1}\" > {0}</a><br>" +
+			"Reddit Link: {2}<br>",
 
 			"<p><b>{0}</b><br>" +
-			"Itch.io 链接: <a href=\"{1}\" > {0}</a><br>" +
-			"Reddit 链接: {2}<br>",
+			"Itch.io Link: <a href=\"{1}\" > {0}</a><br>" +
+			"Reddit Link: {2}<br>",
 
 			"<p><b>{0}</b><br>" +
-			"Ubisoft 链接: <a href=\"{1}\" > {0}</a><br>" +
-			"Reddit 链接: {2}<br>"
+			"Ubisoft Link: <a href=\"{1}\" > {0}</a><br>" +
+			"Reddit Link: {2}<br>"
 		};
 
 		internal static readonly List<string> dingTalkPushFormat = new() {
 			"{0}\n\n" +
 			"App/Sub ID: {1}\n" +
-			"Steam 链接: {2}\n" +
-			"Reddit 链接: {3}\n",
+			"Steam Link: {2}\n" +
+			"Reddit Link: {3}\n",
 
 			"{0}\n\n" +
-			"GOG 链接: {1}\n" +
-			"Reddit 链接: {2}\n",
+			"GOG Link: {1}\n" +
+			"Reddit Link: {2}\n",
 
 			"{0}\n\n" +
-			"Itch.io 链接: {1}\n" +
-			"Reddit 链接: {2}\n",
+			"Itch.io Link: {1}\n" +
+			"Reddit Link: {2}\n",
 
 			"{0}\n\n" +
-			"Ubisoft 链接: {1}\n" +
-			"Reddit 链接: {2}\n"
+			"Ubisoft Link: {1}\n" +
+			"Reddit Link: {2}\n"
 		};
 
 		internal static readonly List<string> pushDeerPushFormat = new() {
 			"{0}\n\n" +
 			"App/Sub ID: {1}\n" +
-			"Steam 链接: {2}\n" +
-			"Reddit 链接: {3}\n",
+			"Steam Link: {2}\n" +
+			"Reddit Link: {3}\n",
 
 			"{0}\n\n" +
-			"GOG 链接: {1}\n" +
-			"Reddit 链接: {2}\n",
+			"GOG Link: {1}\n" +
+			"Reddit Link: {2}\n",
 
 			"{0}\n\n" +
-			"Itch.io 链接: {1}\n" +
-			"Reddit 链接: {2}\n",
+			"Itch.io Link: {1}\n" +
+			"Reddit Link: {2}\n",
 
 			"{0}\n\n" +
-			"Ubisoft 链接: {1}\n" +
-			"Reddit 链接: {2}\n"
+			"Ubisoft Link: {1}\n" +
+			"Reddit Link: {2}\n"
 		};
 
 		internal static readonly List<string> discordPushFormat = new() {
 			"App/Sub ID: {0}\n" +
-			"Steam 链接: {1}\n" +
-			"Reddit 链接: {2}\n\n",
+			"Steam Link: {1}\n" +
+			"Reddit Link: {2}\n\n",
 
-			"GOG 链接: {0}\n" +
-			"Reddit 链接: {1}\n\n",
+			"GOG Link: {0}\n" +
+			"Reddit Link: {1}\n\n",
 
-			"Itch.io 链接: {0}\n" +
-			"Reddit 链接: {1}\n\n",
+			"Itch.io Link: {0}\n" +
+			"Reddit Link: {1}\n\n",
 
-			"Ubisoft 链接: {0}\n" +
-			"Reddit 链接: {1}\n\n"
+			"Ubisoft Link: {0}\n" +
+			"Reddit Link: {1}\n\n"
 		};
 		#endregion
 

@@ -1,5 +1,8 @@
-﻿namespace RedditFreeGamesNotifier.Strings {
+﻿using System.Runtime.Serialization.Json;
+
+namespace RedditFreeGamesNotifier.Strings {
 	internal class ParseStrings {
+		#region platform 
 		internal static readonly Dictionary<string, string> SupportedPlatform = new() {
 			{ "store.steampowered.com", "Steam" },
 			{ "steampowered.com", "Steam" },
@@ -7,13 +10,21 @@
 			{ "itch.io", "Itch.io" },
 			{ "store.ubi.com", "Ubisoft" }
 		};
+		#endregion
 
+		#region keyword blacklist
 		internal static HashSet<string> ignoreKeywords = new() {
 			"ended", "expired", "contains tasks", "discussion", "social media required"
 		};
+		#endregion
 
 		internal static readonly string redditUrl = "https://old.reddit.com";
+
+		#region Steam
 		internal static readonly string steamApiAppDetailsPrefix = "https://store.steampowered.com/api/appdetails?filters=basic,packages&appids=";
+
+		internal static readonly string steamPointsShopUrlPrefix = "https://store.steampowered.com/points/shop";
+		internal static readonly string steamPointsShopItem = "Steam Points Shop Item";
 
 		internal static readonly string appIdRegex = @"app/[0-9]*";
 		internal static readonly string subIdRegex = @"sub/[0-9]*";
@@ -25,15 +36,20 @@
 		internal static readonly string steamAppDetailsPackageGroupsKey = "package_groups";
 		internal static readonly string steamAppDetailsPackagesKey = "packages";
 		internal static readonly string steamAppDetailsGameTypeValueDefault = "default";
+		#endregion
 
+		#region GOG
 		internal static readonly string gogGiveawayUrlKeyword = "#giveaway";
 		internal static readonly string gogGiveawayUrlEndKeyword = "gog.com";
 
 		internal static readonly string gogAllGamesPageTitle = "DRM-free | GOG.COM";
 		internal static readonly string gogRedirectedToMainPageTitle = "GOG.COM | GOG.COM";
 		internal static readonly string gogFreePartnerUrl = "https://www.gog.com/partner/free_games";
+		#endregion
 
+		#region itch.io
 		internal static readonly string itchSalePageUrlPrefix = "https://itch.io/s/";
+		#endregion
 
 		#region Xpaths
 		internal static readonly string redditDivXPath = @".//div[contains(@class, 'thing') and contains(@class, 'link') and not(contains(@class, 'promoted'))]";
@@ -96,6 +112,8 @@
 
 		internal static readonly string debugItchIOCNotClaimable = "Skipping, not claimable: {0}\n";
 		internal static readonly string debugFoundInPreviousPage = "Skipping, found same record in other source: {0}\n";
+
+		internal static readonly string debugSteamPointsShtopItemDetected = "Steam points shop item detected: {0}\n";
 		#endregion
 	}
 }

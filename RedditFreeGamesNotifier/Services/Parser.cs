@@ -49,9 +49,10 @@ namespace RedditFreeGamesNotifier.Services {
 						var platform = ParseStrings.SupportedPlatform[dataDomain];
 						var redditLink = new StringBuilder().Append(ParseStrings.redditUrl).Append(dataPermaLink).ToString();
 
+						var isSteamPointsShopItem = platform == "Steam" && dataUrl.StartsWith(ParseStrings.steamPointsShopUrlPrefix);
 						var isGOGGiveaway = platform == "GOG" && IsGOGGiveaway(dataUrl);
 
-						var appId = GetGameId(dataUrl);
+						var appId = isSteamPointsShopItem ? ParseStrings.steamPointsShopItem : GetGameId(dataUrl);
 						var subId = string.Empty;
 						AppDetails steamAppDetails = null;
 						#endregion
@@ -70,10 +71,9 @@ namespace RedditFreeGamesNotifier.Services {
 							if (appId == string.Empty) {
 								_logger.LogDebug(ParseStrings.debugSteamIDNotDetected, dataUrl);
 								continue;
-							}
-
-							// found in other subreddits
-							if (result.Records.Any(record => record.AppId.Split(',').Contains(appId))) {
+							} else if (appId == ParseStrings.steamPointsShopItem) {
+								_logger.LogDebug(ParseStrings.debugSteamPointsShtopItemDetected, dataUrl);
+							} else if (result.Records.Any(record => record.AppId.Split(',').Contains(appId))) { 
 								_logger.LogDebug(ParseStrings.debugSteamIDDuplicationDetected, dataUrl);
 								continue;
 							}
@@ -117,8 +117,8 @@ namespace RedditFreeGamesNotifier.Services {
 							}
 						}
 
-						if (platform == "Steam") {
-							steamAppDetails = platform == "Steam" ? await GetSteamAppDetails(appId.Split('/')[1]) : null;
+						if (platform == "Steam" && !isSteamPointsShopItem) {
+							steamAppDetails = await GetSteamAppDetails(appId.Split('/')[1]);
 							subId = await GetSteamSubID(steamAppDetails);
 						}
 						#endregion

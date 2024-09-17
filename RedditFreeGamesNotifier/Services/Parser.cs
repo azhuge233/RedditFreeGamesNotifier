@@ -143,7 +143,7 @@ namespace RedditFreeGamesNotifier.Services {
 
 							_logger.LogInformation(ParseStrings.infoFoundNewGame, newRecord.Name);
 
-							if (newRecord.Platform == "Steam" && !string.IsNullOrEmpty(newRecord.AppId)) result.SteamFreeGames.Add(newRecord);
+							if (newRecord.Platform == "Steam" && !isSteamPointsShopItem && !string.IsNullOrEmpty(newRecord.AppId)) result.SteamFreeGames.Add(newRecord);
 							else if (newRecord.Platform == "GOG" && newRecord.IsGOGGiveaway) result.HasGOGGiveaway = true;
 
 							result.NotifyRecords.Add(newRecord);

@@ -139,7 +139,7 @@ namespace RedditFreeGamesNotifier.Services {
 						#region notification list
 						if (!oldRecords.Any(record => record.RedditUrl == newRecord.RedditUrl || 
 							record.Url == newRecord.Url || 
-							(newRecord.Platform == "Steam" && record.AppId == newRecord.AppId) )) {
+							(newRecord.Platform == "Steam" && !isSteamPointsShopItem && record.AppId == newRecord.AppId) )) {
 
 							_logger.LogInformation(ParseStrings.infoFoundNewGame, newRecord.Name);
 

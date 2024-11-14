@@ -24,7 +24,7 @@ namespace RedditFreeGamesNotifier.Services.Notifier {
 			try {
 				foreach (var record in records) {
 					_logger.LogDebug($"{debugSendMessage} : {record.Name}");
-					await BotClient.SendTextMessageAsync(
+					await BotClient.SendMessage(
 						chatId: config.TelegramChatID,
 						text: $"{record.ToTelegramMessage()}{NotifyFormatStrings.projectLinkHTML.Replace("<br>", "\n")}",
 						parseMode: ParseMode.Html
@@ -45,7 +45,7 @@ namespace RedditFreeGamesNotifier.Services.Notifier {
 
 			try {
 				_logger.LogDebug(debugSendMessageASF);
-				await BotClient.SendTextMessageAsync(
+				await BotClient.SendMessage(
 					chatId: config.TelegramChatID,
 					text: $"{asfResult.Replace("<", "&lt;").Replace(">", "&gt;")}",
 					parseMode: ParseMode.Html

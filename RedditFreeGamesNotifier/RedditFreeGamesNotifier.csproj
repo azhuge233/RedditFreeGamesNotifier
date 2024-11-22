@@ -22,8 +22,8 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.0" />
     <PackageReference Include="MimeKit" Version="4.8.0" />
-    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.14" />
-    <PackageReference Include="Telegram.Bot" Version="22.1.1" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.15" />
+    <PackageReference Include="Telegram.Bot" Version="22.1.2" />
     <PackageReference Include="Websocket.Client" Version="5.1.2" />
   </ItemGroup>
 

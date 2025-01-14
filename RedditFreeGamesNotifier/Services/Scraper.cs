@@ -1,15 +1,16 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Net;
+using Microsoft.Extensions.Logging;
 using RedditFreeGamesNotifier.Strings;
 
 namespace RedditFreeGamesNotifier.Services {
 	internal class Scraper: IDisposable {
 		private readonly ILogger<Scraper> _logger;
 
-		internal HttpClient Client { get; set; } = new HttpClient();
+		internal HttpClient RedditClient { get; set; }
+		internal HttpClient OthersClient { get; set; } = new HttpClient();
 
 		public Scraper(ILogger<Scraper> logger) {
 			_logger = logger;
-			Client.DefaultRequestHeaders.Add("User-Agent", ScrapeStrings.UAs[new Random().Next(0, ScrapeStrings.UAs.Length - 1)]);
 		}
 
 		internal async Task<Dictionary<string, string>> GetSource() {
@@ -17,11 +18,23 @@ namespace RedditFreeGamesNotifier.Services {
 				_logger.LogDebug(ScrapeStrings.debugGetSource);
 				var results = new Dictionary<string, string>();
 
+				RedditClient = new HttpClient(
+					new HttpClientHandler() {
+						CookieContainer = CreateCookie()
+					}
+				);
+
+				RedditClient.DefaultRequestHeaders.Add("User-Agent", ScrapeStrings.UAs[new Random().Next(0, ScrapeStrings.UAs.Length - 1)]);
+
 				foreach (var url in ScrapeStrings.RedditUrls) {
 					_logger.LogDebug(ScrapeStrings.debugGetSourceWithUrl, url);
-					var response = await Client.GetAsync(url);
-					results.Add(url, await response.Content.ReadAsStringAsync());
-					Task.Delay(new Random().Next(500, 800)).Wait();
+					var response = await RedditClient.GetAsync(url);
+					var content = await response.Content.ReadAsStringAsync();
+					results.Add(url, content);
+
+					// _logger.LogDebug($"response content: {content}");
+
+					await Task.Delay(new Random().Next(500, 800));
 				}
 
 				_logger.LogDebug($"Done: {ScrapeStrings.debugGetSource}");
@@ -39,7 +52,7 @@ namespace RedditFreeGamesNotifier.Services {
 				_logger.LogDebug(ScrapeStrings.debugGetSource);
 
 				_logger.LogDebug(ScrapeStrings.debugGetSourceWithUrl, url);
-				var response = await Client.GetAsync(url);
+				var response = await OthersClient.GetAsync(url);
 				var result = await response.Content.ReadAsStringAsync();
 
 				_logger.LogDebug($"Done: {ScrapeStrings.debugGetSource}");
@@ -50,6 +63,24 @@ namespace RedditFreeGamesNotifier.Services {
 			} finally {
 				Dispose();
 			}
+		}
+
+		private static CookieContainer CreateCookie() { 
+			var cookieContainer = new CookieContainer();
+
+			var redditCookie = new Cookie() {
+				Name = ScrapeStrings.RedditCookieName,
+				Value = string.Empty,
+				Domain = ScrapeStrings.RedditCookieDomain,
+				Path = ScrapeStrings.RedditCookiePath,
+				Expires = DateTime.Now.AddYears(1),
+				Secure = true,
+				HttpOnly = true
+			};
+
+			cookieContainer.Add(redditCookie);
+
+			return cookieContainer;
 		}
 
 		public void Dispose() { 

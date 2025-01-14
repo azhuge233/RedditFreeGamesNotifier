@@ -21,6 +21,7 @@ namespace RedditFreeGamesNotifier.Services {
 					_logger.LogDebug(ScrapeStrings.debugGetSourceWithUrl, url);
 					var response = await Client.GetAsync(url);
 					results.Add(url, await response.Content.ReadAsStringAsync());
+					Task.Delay(new Random().Next(500, 800)).Wait();
 				}
 
 				_logger.LogDebug($"Done: {ScrapeStrings.debugGetSource}");

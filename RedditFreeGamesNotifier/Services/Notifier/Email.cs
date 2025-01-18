@@ -27,7 +27,7 @@ namespace RedditFreeGamesNotifier.Services.Notifier {
 
 				var message = new MimeMessage();
 
-				message.From.Add(new MailboxAddress("SteamDB-FreeGames", fromAddress));
+				message.From.Add(new MailboxAddress("Reddit Free Games", fromAddress));
 				message.To.Add(new MailboxAddress("Receiver", toAddress));
 
 				var sb = new StringBuilder();

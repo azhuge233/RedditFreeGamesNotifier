@@ -9,7 +9,6 @@ using RedditFreeGamesNotifier.Strings;
 using System.Text;
 using System.Text.RegularExpressions;
 using RedditFreeGamesNotifier.Models.SteamApi;
-using Microsoft.AspNetCore.Routing;
 
 namespace RedditFreeGamesNotifier.Services {
 	internal class Parser: IDisposable {

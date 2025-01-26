@@ -9,6 +9,7 @@ using RedditFreeGamesNotifier.Strings;
 using System.Text;
 using System.Text.RegularExpressions;
 using RedditFreeGamesNotifier.Models.SteamApi;
+using Microsoft.AspNetCore.Routing;
 
 namespace RedditFreeGamesNotifier.Services {
 	internal class Parser: IDisposable {
@@ -34,7 +35,11 @@ namespace RedditFreeGamesNotifier.Services {
 					foreach (var div in divs) {
 						#region get game info
 						var spans = div.SelectNodes(ParseStrings.redditEndedPXPath);
-						var spanInnerText = spans.Count > 1 ? div.SelectSingleNode(ParseStrings.redditEndedSpanXPath).InnerText.ToLower() : string.Empty;
+						var spanInnerText = string.Empty;
+						if (spans != null && spans.Count > 1) {
+							var endedSpan = div.SelectSingleNode(ParseStrings.redditEndedSpanXPath);
+							if(endedSpan != null) spanInnerText = endedSpan.InnerText.ToLower();
+						}
 						var dataDomain = div.Attributes[ParseStrings.dataDomainKey].Value;
 
 						// Check if post is in supported game platform list

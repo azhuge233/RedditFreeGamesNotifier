@@ -201,9 +201,10 @@ namespace RedditFreeGamesNotifier.Services {
 
 					if (!record.IsGOGGiveaway) {
 						/// When url is GOG free partner page: https://www.gog.com/partner/free_games
+						/// or any other ignored page in the set, e.g. https://www.gog.com/account
 						/// return reddit title
 						/// skip fetching page source, since that will trigger unnecessary errors
-						if (!record.Url.StartsWith(ParseStrings.gogFreePartnerUrl)) {
+						if (!ParseStrings.gogIgnoredUrls.Any(record.Url.StartsWith)) {
 							var source = await services.GetRequiredService<Scraper>().GetSource(record.Url);
 							var htmlDoc = new HtmlDocument();
 							htmlDoc.LoadHtml(source);

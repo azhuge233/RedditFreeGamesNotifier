@@ -13,9 +13,9 @@ namespace RedditFreeGamesNotifier.Strings {
 		#endregion
 
 		#region keyword blacklist
-		internal static HashSet<string> ignoreKeywords = new() {
+		internal static HashSet<string> ignoreKeywords = [
 			"ended", "expired", "contains tasks", "discussion", "social media required"
-		};
+		];
 		#endregion
 
 		internal static readonly string redditUrl = "https://old.reddit.com";
@@ -44,7 +44,10 @@ namespace RedditFreeGamesNotifier.Strings {
 
 		internal static readonly string gogAllGamesPageTitle = "DRM-free | GOG.COM";
 		internal static readonly string gogRedirectedToMainPageTitle = "GOG.COM | GOG.COM";
-		internal static readonly string gogFreePartnerUrl = "https://www.gog.com/partner/free_games";
+		internal static HashSet<string> gogIgnoredUrls = [
+			"https://www.gog.com/partner/free_games",
+			"https://www.gog.com/account"
+		];
 		#endregion
 
 		#region itch.io

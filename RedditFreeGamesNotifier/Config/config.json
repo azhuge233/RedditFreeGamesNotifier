@@ -38,6 +38,10 @@
   "EnableDiscord": false,
   "DiscordWebhookURL": "",
 
+  "EnableMeow": false,
+  "MeowAddress": "https://api.chuckfang.com",
+  "MeowNickname":  "",
+
   "EnableASF": false,
   "ASFIPCUrl": "",
   "ASFIPCPassword": "",

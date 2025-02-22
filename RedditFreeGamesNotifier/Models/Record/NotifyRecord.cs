@@ -50,5 +50,10 @@ namespace RedditFreeGamesNotifier.Models.Record {
 			if (Platform == "Steam") return new StringBuilder().AppendFormat(NotifyFormatStrings.discordPushFormat[NotifyStrings.PlatformId[Platform]], Name, AppId, Url, RedditUrl).ToString();
 			return new StringBuilder().AppendFormat(NotifyFormatStrings.discordPushFormat[NotifyStrings.PlatformId[Platform]], Url, RedditUrl).ToString();
 		}
+
+		public string ToMeowMessage() { 
+			if(Platform == "Steam") return new StringBuilder().AppendFormat(NotifyFormatStrings.meowPushFormat[NotifyStrings.PlatformId[Platform]], Name, AppId, Url, RedditUrl).ToString();
+			return new StringBuilder().AppendFormat(NotifyFormatStrings.meowPushFormat[NotifyStrings.PlatformId[Platform]], Name, Url, RedditUrl).ToString();
+		}
 	}
 }

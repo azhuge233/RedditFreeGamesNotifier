@@ -105,6 +105,12 @@ namespace RedditFreeGamesNotifier.Services {
 					notifyTasks.Add(services.GetRequiredService<Email>().SendMessage(config, pushListFinal));
 				} else _logger.LogInformation(debugDisabledFormat, "Email");
 
+				// Meow notifications
+				if (config.EnableMeow) {
+					_logger.LogInformation(debugEnabledFormat, "Meow");
+					notifyTasks.Add(services.GetRequiredService<Meow>().SendMessage(config, pushListFinal));
+				}
+
 				await Task.WhenAll(notifyTasks);
 
 				_logger.LogDebug($"Done: {debugNotify}");
@@ -173,6 +179,12 @@ namespace RedditFreeGamesNotifier.Services {
 						_logger.LogInformation(debugEnabledFormat, "Email");
 						await services.GetRequiredService<Email>().SendMessage(config, asfResult);
 					} else _logger.LogInformation(debugDisabledFormat, "Email");
+
+					// Meow notifications
+					if (config.EnableMeow) {
+						_logger.LogInformation(debugEnabledFormat, "Meow");
+						await services.GetRequiredService<Meow>().SendMessage(config, asfResult);
+					} else _logger.LogInformation(debugDisabledFormat, "Meow");
 				} else _logger.LogDebug(debugDisabledFormat, "ASF");
 
 				_logger.LogDebug($"Done: {debugNotify}");

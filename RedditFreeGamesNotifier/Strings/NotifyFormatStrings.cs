@@ -152,6 +152,25 @@
 			"Ubisoft Link: {0}\n" +
 			"Reddit Link: {1}\n\n"
 		};
+
+		internal static readonly List<string> meowPushFormat = new() {
+			"{0}\n\n" +
+			"App/Sub ID: {1}\n" +
+			"Steam Link: {2}\n" +
+			"Reddit Link: {3}\n",
+
+			"{0}\n\n" +
+			"GOG Link: {1}\n" +
+			"Reddit Link: {2}\n",
+
+			"{0}\n\n" +
+			"Itch.io Link: {1}\n" +
+			"Reddit Link: {2}\n",
+
+			"{0}\n\n" +
+			"Ubisoft Link: {1}\n" +
+			"Reddit Link: {2}\n",
+		};
 		#endregion
 
 		#region url, title format string
@@ -181,6 +200,10 @@
 		internal static readonly string dingTalkUrlFormat = "https://oapi.dingtalk.com/robot/send?access_token={0}";
 
 		internal static readonly string pushDeerUrlFormat = "https://api2.pushdeer.com/message/push?pushkey={0}&&text={1}";
+
+		internal static readonly string meowUrlFormat = "{0}/{1}";
+		internal static readonly string meowUrlTitle = "RedditFreeGamesNotifier";
+		internal static readonly string meowUrlASFTitle = "RedditFreeGamesNotifierASFResult";
 		#endregion
 
 		internal static readonly string projectLink = "\n\nFrom https://github.com/azhuge233/RedditFreeGamesNotifier";

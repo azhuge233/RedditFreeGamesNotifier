@@ -37,5 +37,9 @@
 
 		public bool EnableDiscord { get; set; }
 		public string DiscordWebhookURL { get; set; }
+
+		public bool EnableMeow { get; set; }
+		public string MeowAddress { get; set; }
+		public string MeowNickname { get; set; }
 	}
 }

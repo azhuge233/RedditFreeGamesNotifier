@@ -4,6 +4,7 @@ using RedditFreeGamesNotifier.Models.Config;
 using RedditFreeGamesNotifier.Models.Record;
 using RedditFreeGamesNotifier.Modules;
 using RedditFreeGamesNotifier.Services.Notifier;
+using System.Diagnostics.CodeAnalysis;
 using Telegram.Bot.Types;
 
 namespace RedditFreeGamesNotifier.Services {
@@ -131,60 +132,64 @@ namespace RedditFreeGamesNotifier.Services {
 			try {
 				_logger.LogDebug(debugNotify);
 
+				var notifyTasks = new List<Task>();
+
 				if (config.NotifyASFResult) {
 					// Telegram notifications
 					if (config.EnableTelegram) {
 						_logger.LogInformation(debugEnabledFormat, "Telegram");
-						await services.GetRequiredService<TelegramBot>().SendMessage(config, asfResult);
+						notifyTasks.Add(services.GetRequiredService<TelegramBot>().SendMessage(config, asfResult));
 					} else _logger.LogInformation(debugDisabledFormat, "Telegram");
 
 					// Bark notifications
 					if (config.EnableBark) {
 						_logger.LogInformation(debugEnabledFormat, "Bark");
-						await services.GetRequiredService<Bark>().SendMessage(config, asfResult);
+						notifyTasks.Add(services.GetRequiredService<Bark>().SendMessage(config, asfResult));
 					} else _logger.LogInformation(debugDisabledFormat, "Bark");
 
 					// QQ notifications
 					if (config.EnableQQ) {
 						_logger.LogInformation(debugEnabledFormat, "QQ");
-						await services.GetRequiredService<QQ>().SendMessage(config, asfResult);
+						notifyTasks.Add(services.GetRequiredService<QQ>().SendMessage(config, asfResult));
 					} else _logger.LogInformation(debugDisabledFormat, "QQ");
 
 					// PushPlus notifications
 					if (config.EnablePushPlus) {
 						_logger.LogInformation(debugEnabledFormat, "PushPlus");
-						await services.GetRequiredService<PushPlus>().SendMessage(config, asfResult);
+						notifyTasks.Add(services.GetRequiredService<PushPlus>().SendMessage(config, asfResult));
 					} else _logger.LogInformation(debugDisabledFormat, "PushPlus");
 
 					// DingTalk notifications
 					if (config.EnableDingTalk) {
 						_logger.LogInformation(debugEnabledFormat, "DingTalk");
-						await services.GetRequiredService<DingTalk>().SendMessage(config, asfResult);
+						notifyTasks.Add(services.GetRequiredService<DingTalk>().SendMessage(config, asfResult));
 					} else _logger.LogInformation(debugDisabledFormat, "DingTalk");
 
 					// PushDeer notifications
 					if (config.EnablePushDeer) {
 						_logger.LogInformation(debugEnabledFormat, "PushDeer");
-						await services.GetRequiredService<PushDeer>().SendMessage(config, asfResult);
+						notifyTasks.Add(services.GetRequiredService<PushDeer>().SendMessage(config, asfResult));
 					} else _logger.LogInformation(debugDisabledFormat, "PushDeer");
 
 					// Discord notifications
 					if (config.EnableDiscord) {
 						_logger.LogInformation(debugEnabledFormat, "Discord");
-						await services.GetRequiredService<Discord>().SendMessage(config, asfResult);
+						notifyTasks.Add(services.GetRequiredService<Discord>().SendMessage(config, asfResult));
 					} else _logger.LogInformation(debugDisabledFormat, "Discord");
 
 					// Email notifications
 					if (config.EnableEmail) {
 						_logger.LogInformation(debugEnabledFormat, "Email");
-						await services.GetRequiredService<Email>().SendMessage(config, asfResult);
+						notifyTasks.Add(services.GetRequiredService<Email>().SendMessage(config, asfResult));
 					} else _logger.LogInformation(debugDisabledFormat, "Email");
 
 					// Meow notifications
 					if (config.EnableMeow) {
 						_logger.LogInformation(debugEnabledFormat, "Meow");
-						await services.GetRequiredService<Meow>().SendMessage(config, asfResult);
+						notifyTasks.Add(services.GetRequiredService<Meow>().SendMessage(config, asfResult));
 					} else _logger.LogInformation(debugDisabledFormat, "Meow");
+
+					await Task.WhenAll(notifyTasks);
 				} else _logger.LogDebug(debugDisabledFormat, "ASF");
 
 				_logger.LogDebug($"Done: {debugNotify}");

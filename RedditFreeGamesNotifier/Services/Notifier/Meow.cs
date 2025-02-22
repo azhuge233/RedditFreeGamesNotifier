@@ -62,7 +62,7 @@ namespace RedditFreeGamesNotifier.Services.Notifier {
 				var data = new StringContent("");
 				var resp = new HttpResponseMessage();
 
-				content.Title = "ASF result";
+				content.Title = NotifyFormatStrings.meowUrlASFTitle;
 				content.Message = $"{asfRecord}";
 				data = new StringContent(JsonSerializer.Serialize(content), Encoding.UTF8, "application/json");
 

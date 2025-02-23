@@ -110,7 +110,7 @@ namespace RedditFreeGamesNotifier.Services {
 				if (config.EnableMeow) {
 					_logger.LogInformation(debugEnabledFormat, "Meow");
 					notifyTasks.Add(services.GetRequiredService<Meow>().SendMessage(config, pushListFinal));
-				}
+				} else _logger.LogInformation(debugDisabledFormat, "Meow");
 
 				await Task.WhenAll(notifyTasks);
 

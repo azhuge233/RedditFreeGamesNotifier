@@ -25,15 +25,16 @@ namespace RedditFreeGamesNotifier.Services.Notifier {
 
 				string url = new StringBuilder().AppendFormat(NotifyFormatStrings.meowUrlFormat, config.MeowAddress, config.MeowNickname).ToString();
 
-				var content = new MeowPostContent();
+				var content = new MeowPostContent() { 
+					Title = NotifyFormatStrings.meowUrlTitle
+				};
 
 				var client = new HttpClient();
 				var data = new StringContent("");
 				var resp = new HttpResponseMessage();
 
 				foreach (var record in records) {
-					content.Title = NotifyFormatStrings.meowUrlTitle;
-					content.Message= $"{record.ToMeowMessage()}{NotifyFormatStrings.projectLink}";
+					content.Message = $"{record.ToMeowMessage()}{NotifyFormatStrings.projectLink}";
 					content.Url = record.Url;
 
 					data = new StringContent(JsonSerializer.Serialize(content), Encoding.UTF8, "application/json");
@@ -42,6 +43,7 @@ namespace RedditFreeGamesNotifier.Services.Notifier {
 					_logger.LogDebug(await resp.Content.ReadAsStringAsync());
 					await Task.Delay(3000); // Meow has a rate limit of 1 request per 3 seconds
 				}
+
 				_logger.LogDebug($"Done: {debugSendMessage}");
 			} catch (Exception) {
 				_logger.LogDebug($"Error: {debugSendMessage}");
@@ -64,9 +66,10 @@ namespace RedditFreeGamesNotifier.Services.Notifier {
 
 				content.Title = NotifyFormatStrings.meowUrlASFTitle;
 				content.Message = $"{asfRecord}";
-				data = new StringContent(JsonSerializer.Serialize(content), Encoding.UTF8, "application/json");
 
+				data = new StringContent(JsonSerializer.Serialize(content), Encoding.UTF8, "application/json");
 				resp = await client.PostAsync(url, data);
+
 				_logger.LogDebug(await resp.Content.ReadAsStringAsync());
 
 				_logger.LogDebug($"Done: {debugSendMessageASF}");

@@ -4,8 +4,6 @@ using RedditFreeGamesNotifier.Models.Config;
 using RedditFreeGamesNotifier.Models.Record;
 using RedditFreeGamesNotifier.Modules;
 using RedditFreeGamesNotifier.Services.Notifier;
-using System.Diagnostics.CodeAnalysis;
-using Telegram.Bot.Types;
 
 namespace RedditFreeGamesNotifier.Services {
 	internal class NotifyOP : IDisposable {

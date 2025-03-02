@@ -15,14 +15,15 @@
   "AuthAccount": "",
   "AuthPassword": "",
 
-  "EnableQQ": false,
-  "QQAddress": "127.0.0.1",
-  "QQPort": 5700,
+  "EnableQQHttp": false,
+  "QQHttpAddress": "127.0.0.1",
+  "QQHttpPort": 3000,
+  "QQHttpToken": "",
 
-  "EnableRed": false,
-  "RedAddress": "127.0.0.1",
-  "RedPort": 16530,
-  "RedToken": "",
+  "EnableQQWebSocket": false,
+  "QQWebSocketAddress": "127.0.0.1",
+  "QQWebSocketPort": 3001,
+  "QQWebSocketToken": "",
 
   "ToQQID": "",
 
@@ -40,7 +41,7 @@
 
   "EnableMeow": false,
   "MeowAddress": "https://api.chuckfang.com",
-  "MeowNickname":  "",
+  "MeowNickname": "",
 
   "EnableASF": false,
   "ASFIPCUrl": "",

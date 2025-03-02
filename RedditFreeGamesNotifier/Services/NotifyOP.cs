@@ -62,17 +62,17 @@ namespace RedditFreeGamesNotifier.Services {
 					notifyTasks.Add(services.GetRequiredService<Bark>().SendMessage(config, pushListFinal));
 				} else _logger.LogInformation(debugDisabledFormat, "Bark");
 
-				// QQ notifications
-				if (config.EnableQQ) {
-					_logger.LogInformation(debugEnabledFormat, "QQ");
-					notifyTasks.Add(services.GetRequiredService<QQ>().SendMessage(config, pushListFinal));
-				} else _logger.LogInformation(debugDisabledFormat, "QQ");
+				// QQ Http notifications
+				if (config.EnableQQHttp) {
+					_logger.LogInformation(debugEnabledFormat, "QQ Http");
+					notifyTasks.Add(services.GetRequiredService<QQHttp>().SendMessage(config, pushListFinal));
+				} else _logger.LogInformation(debugDisabledFormat, "QQ Http");
 
-				//QQ Red (Chronocat) notifications
-				if (config.EnableRed) {
-					_logger.LogInformation(debugEnabledFormat, "QQ Red (Chronocat)");
-					notifyTasks.Add(services.GetRequiredService<QQRed>().SendMessage(config, pushListFinal));
-				} else _logger.LogInformation(debugDisabledFormat, "QQ Red (Chronocat)");
+				// QQ WebSocket notifications
+				if (config.EnableQQWebSocket) {
+					_logger.LogInformation(debugEnabledFormat, "QQ WebSocket");
+					notifyTasks.Add(services.GetRequiredService<QQWebSocket>().SendMessage(config, pushListFinal));
+				} else _logger.LogInformation(debugDisabledFormat, "QQ WebSocket");
 
 				// PushPlus notifications
 				if (config.EnablePushPlus) {
@@ -145,11 +145,17 @@ namespace RedditFreeGamesNotifier.Services {
 						notifyTasks.Add(services.GetRequiredService<Bark>().SendMessage(config, asfResult));
 					} else _logger.LogInformation(debugDisabledFormat, "Bark");
 
-					// QQ notifications
-					if (config.EnableQQ) {
-						_logger.LogInformation(debugEnabledFormat, "QQ");
-						notifyTasks.Add(services.GetRequiredService<QQ>().SendMessage(config, asfResult));
-					} else _logger.LogInformation(debugDisabledFormat, "QQ");
+					// QQ Http notifications
+					if (config.EnableQQHttp) {
+						_logger.LogInformation(debugEnabledFormat, "QQ Http");
+						notifyTasks.Add(services.GetRequiredService<QQHttp>().SendMessage(config, asfResult));
+					} else _logger.LogInformation(debugDisabledFormat, "QQ Http");
+
+					// QQ WebSocket notifications
+					if (config.EnableQQWebSocket) {
+						_logger.LogInformation(debugEnabledFormat, "QQ WebSocket");
+						notifyTasks.Add(services.GetRequiredService<QQWebSocket>().SendMessage(config, asfResult));
+					} else _logger.LogInformation(debugDisabledFormat, "QQ WebSocket");
 
 					// PushPlus notifications
 					if (config.EnablePushPlus) {

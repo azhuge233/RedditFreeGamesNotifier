@@ -47,26 +47,30 @@ namespace RedditFreeGamesNotifier.Services {
 						throw new Exception(message: "No email auth password provided!");
 				}
 
-				//QQ
-				if (config.EnableQQ) {
-					if (string.IsNullOrEmpty(config.QQAddress))
-						throw new Exception(message: "No QQ address provided!");
-					if (string.IsNullOrEmpty(config.QQPort.ToString()))
-						throw new Exception(message: "No QQ port provided!");
+				//QQ Http
+				if (config.EnableQQHttp) {
+					if (string.IsNullOrEmpty(config.QQHttpAddress))
+						throw new Exception(message: "No QQ http address provided!");
+					if (string.IsNullOrEmpty(config.QQHttpPort.ToString()))
+						throw new Exception(message: "No QQ http port provided!");
 					if (string.IsNullOrEmpty(config.ToQQID))
 						throw new Exception(message: "No QQ ID provided!");
+					if (string.IsNullOrEmpty(config.QQHttpToken))
+						_logger.LogInformation("No QQ Http token provided, make sure to set it right if token is enabled in your server settings.");
 				}
 
-				//QQ Red (Chronocat)
-				if (config.EnableRed) {
-					if (string.IsNullOrEmpty(config.RedAddress))
-						throw new Exception(message: "No Red address provided!");
-					if (string.IsNullOrEmpty(config.RedPort.ToString()))
-						throw new Exception(message: "No Red port provided!");
-					if (string.IsNullOrEmpty(config.RedToken))
-						throw new Exception(message: "No Red token provided!");
+				//QQ WebSocket
+				if (config.EnableQQWebSocket) {
+					if (string.IsNullOrEmpty(config.QQWebSocketAddress))
+						throw new Exception(message: "No QQ WebSocket address provided!");
+					if (string.IsNullOrEmpty(config.QQWebSocketPort.ToString()))
+						throw new Exception(message: "No QQ WebSocket port provided!");
+					if (string.IsNullOrEmpty(config.QQWebSocketToken))
+						throw new Exception(message: "No QQ WebSocket token provided!");
 					if (string.IsNullOrEmpty(config.ToQQID))
 						throw new Exception(message: "No QQ ID provided!");
+					if (string.IsNullOrEmpty(config.QQWebSocketToken))
+						_logger.LogInformation("No QQ WebSocket token provided, make sure to set it right if token is enabled in your server settings.");
 				}
 
 				//PushPlus

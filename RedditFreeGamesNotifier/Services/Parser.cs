@@ -249,7 +249,7 @@ namespace RedditFreeGamesNotifier.Services {
 
 				var data = appDetails.Data;
 
-				if (data.Type == "dlc") {
+				if(ParseStrings.supportedGameType.Contains(data.Type)) {
 					if (data.PackageGroups != null && data.PackageGroups.Count > 0) {
 						var defaultPackageGroup = appDetails.Data.PackageGroups.First(pg => pg.Name == ParseStrings.steamAppDetailsGameTypeValueDefault);
 						var freeSubs = defaultPackageGroup.Subs.Where(sub => sub.IsFreeLicense == true).ToList();
@@ -258,14 +258,17 @@ namespace RedditFreeGamesNotifier.Services {
 					}
 
 					_logger.LogDebug(ParseStrings.debugGetSteamSubIDMainGameAppID);
-					var fullGameAppDetails = await GetSteamAppDetails(data.FullGame.AppID);
-					if (fullGameAppDetails != null && fullGameAppDetails.Success) {
-						if (fullGameAppDetails.Data.IsFree) {
-							var mainGameAppIdString = $"{ParseStrings.appIdPrefix}{fullGameAppDetails.Data.SteamAppID}";
-							freeSubsIDString = string.IsNullOrEmpty(freeSubsIDString) ? mainGameAppIdString : string.Join(",", freeSubsIDString, mainGameAppIdString);
-						} else _logger.LogDebug(ParseStrings.debugGetSteamSubIDMainGameNotFree, data.SteamAppID);
-					} else _logger.LogDebug(ParseStrings.debugGetSteamSubIDMainGameAppDetailsFailed);
-				} else _logger.LogDebug(ParseStrings.debugGetSteamSubIDNotDLC);
+
+					if (data.Type == ParseStrings.gameTypeDLC) {
+						var fullGameAppDetails = await GetSteamAppDetails(data.FullGame.AppID);
+						if (fullGameAppDetails != null && fullGameAppDetails.Success) {
+							if (fullGameAppDetails.Data.IsFree) {
+								var mainGameAppIdString = $"{ParseStrings.appIdPrefix}{fullGameAppDetails.Data.SteamAppID}";
+								freeSubsIDString = string.IsNullOrEmpty(freeSubsIDString) ? mainGameAppIdString : string.Join(",", freeSubsIDString, mainGameAppIdString);
+							} else _logger.LogDebug(ParseStrings.debugGetSteamSubIDMainGameNotFree, data.SteamAppID);
+						} else _logger.LogDebug(ParseStrings.debugGetSteamSubIDMainGameAppDetailsFailed);
+					}
+				} else _logger.LogDebug(ParseStrings.debugGetSteamSubIDNotDLCOrGame);
 
 				_logger.LogDebug(ParseStrings.debugGetSteamSubIDNoSubID);
 				return freeSubsIDString;

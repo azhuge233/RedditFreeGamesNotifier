@@ -21,6 +21,10 @@ namespace RedditFreeGamesNotifier.Strings {
 		internal static readonly string redditUrl = "https://old.reddit.com";
 
 		#region Steam
+		internal static string gameTypeGame = "game";
+		internal static string gameTypeDLC = "dlc";
+		internal static HashSet<string> supportedGameType = [ gameTypeGame, gameTypeDLC];
+
 		internal static readonly string steamApiAppDetailsPrefix = "https://store.steampowered.com/api/appdetails?filters=basic,packages&appids=";
 
 		internal static readonly string steamPointsShopUrlPrefix = "https://store.steampowered.com/points/shop";
@@ -85,7 +89,7 @@ namespace RedditFreeGamesNotifier.Strings {
 
 		internal static readonly string debugGetSteamSubID = "Get Steam Sub ID";
 		internal static readonly string debugGotSteamSubID = "Got Steam Sub ID: {0}";
-		internal static readonly string debugGetSteamSubIDNotDLC = "Not DLC, skip getting sub ID, returning app ID instead.";
+		internal static readonly string debugGetSteamSubIDNotDLCOrGame = "Not DLC or game, skip getting sub ID, returning app ID instead.";
 		internal static readonly string debugGetSteamSubIDNoSubID = "No sub ID detected, returning empty string.";
 		internal static readonly string debugGetSteamSubIDMainGameAppID = "Getting main game AppID";
 		internal static readonly string debugGetSteamSubIDMainGameNotFree = "Main game for DLC app/{0} is not free, skipping";

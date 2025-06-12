@@ -183,7 +183,7 @@ namespace RedditFreeGamesNotifier.Services {
 
 				var json = JsonSerializer.Deserialize<Dictionary<string, AppDetails>>(source);
 
-				_logger.LogDebug(ParseStrings.debugSteamApiFailed, appId);
+				_logger.LogDebug($"Done: {ParseStrings.debugGetSteamAppDetails}", appId);
 				return json[appId];
 			} catch (Exception ex) {
 				_logger.LogDebug(ParseStrings.errorGetSteamAppDetails, appId);

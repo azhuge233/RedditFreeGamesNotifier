@@ -94,7 +94,7 @@ namespace RedditFreeGamesNotifier.Strings {
 		internal static readonly string debugGetSteamSubIDMainGameAppID = "Getting main game AppID";
 		internal static readonly string debugGetSteamSubIDMainGameNotFree = "Main game for DLC app/{0} is not free, skipping";
 		internal static readonly string debugGetSteamSubIDMainGameAppDetailsFailed = "Get main game app ID failed since getting Steam app details failed.";
-		internal static readonly string debugGetSteamSubIDAppDetailsFailed = "Get sub ID failed since Steam app details failed.";
+		internal static readonly string debugGetSteamSubIDAppDetailsFailed = "Get sub ID failed since null Steam app details or failed success code.";
 
 		internal static readonly string debugGetSteamAppDetails = "GetSteamAppDetails: {0}";
 
@@ -103,7 +103,6 @@ namespace RedditFreeGamesNotifier.Strings {
 
 		internal static readonly string debugIsGOGGiveaway = "GOG Giveaway detected: {0}";
 
-		internal static readonly string debugSteamApiFailed = "Steam App Detail API for game ID {0} returned failed success code.";
 		internal static readonly string errorGetSteamAppDetails = "Cannot get steam app details, app ID: {0}";
 		internal static readonly string errorGetGameName = "Cannot fetch game name from: {0}, probably caused by poor internet connection.";
 

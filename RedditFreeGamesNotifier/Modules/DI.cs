@@ -8,12 +8,14 @@ using RedditFreeGamesNotifier.Services.Notifier;
 
 namespace RedditFreeGamesNotifier.Modules {
 	internal class DI {
+		private static readonly string BasePath = AppDomain.CurrentDomain.BaseDirectory;
+
 		private static readonly IConfigurationRoot logConfig = new ConfigurationBuilder()
-			.SetBasePath(Directory.GetCurrentDirectory())
+			.SetBasePath(BasePath)
 			.Build();
 		private static readonly IConfigurationRoot configuration = new ConfigurationBuilder()
-			.SetBasePath(Directory.GetCurrentDirectory())
-			.AddJsonFile("Config/config.json", optional: false, reloadOnChange: true)
+			.SetBasePath(BasePath)
+			.AddJsonFile($"Config{Path.DirectorySeparatorChar}config.json", optional: false, reloadOnChange: true)
 			.Build();
 
 		internal static IServiceProvider BuildDiAll() {

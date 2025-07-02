@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using RedditFreeGamesNotifier.Models.Config;
 using RedditFreeGamesNotifier.Models.PostContent;
 using RedditFreeGamesNotifier.Models.Record;
@@ -7,19 +8,16 @@ using System.Text;
 using System.Text.Json;
 
 namespace RedditFreeGamesNotifier.Services.Notifier {
-	internal class QQHttp: INotifiable {
-		private readonly ILogger<QQHttp> _logger;
+	internal class QQHttp(ILogger<QQHttp> logger, IOptions<Config> config) : INotifiable {
+		private readonly ILogger<QQHttp> _logger = logger;
+		private readonly Config config = config.Value;
 
 		#region debug strings
 		private readonly string debugSendMessage = "Send notifications to QQ Http";
 		private readonly string debugSendMessageASF = "Send ASF result to QQ Http";
 		#endregion
 
-		public QQHttp(ILogger<QQHttp> logger) {
-			_logger = logger;
-		}
-
-		public async Task SendMessage(NotifyConfig config, List<NotifyRecord> records) {
+		public async Task SendMessage(List<NotifyRecord> records) {
 			try {
 				_logger.LogDebug(debugSendMessage);
 
@@ -54,7 +52,7 @@ namespace RedditFreeGamesNotifier.Services.Notifier {
 			}
 		}
 
-		public async Task SendMessage(NotifyConfig config, string asfResult) {
+		public async Task SendMessage(string asfResult) {
 			try {
 				_logger.LogDebug(debugSendMessageASF);
 

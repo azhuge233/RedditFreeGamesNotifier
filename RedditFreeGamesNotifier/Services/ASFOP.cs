@@ -2,14 +2,15 @@
 using RedditFreeGamesNotifier.Models.ASFOP;
 using RedditFreeGamesNotifier.Models.Record;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Text.Json;
 using RedditFreeGamesNotifier.Strings;
 using RedditFreeGamesNotifier.Models.Config;
+using Microsoft.Extensions.Options;
 
 namespace RedditFreeGamesNotifier.Services {
-	internal class ASFOP : IDisposable {
-		private readonly ILogger<ASFOP> _logger;
+	internal class ASFOP(ILogger<ASFOP> logger, IOptions<Config> config) : IDisposable {
+		private readonly ILogger<ASFOP> _logger = logger;
+		private readonly Config config = config.Value;
 
 		#region debug strings
 		private readonly string debugASFOP = "ASFOP";
@@ -19,26 +20,7 @@ namespace RedditFreeGamesNotifier.Services {
 		private readonly string infoASFDisabled = "ASF disabled, skipping";
 		#endregion
 
-		public ASFOP(ILogger<ASFOP> logger) {
-			_logger = logger;
-		}
-
-		private string GenerateSubIDString(List<FreeGameRecord> gameList) {
-			try {
-				_logger.LogDebug(debugGenerateSubIDString);
-
-				var sb = new StringBuilder();
-				gameList.ForEach(game => sb.Append(sb.Length == 0 ? game.AppId : $",{game.AppId}"));
-
-				_logger.LogDebug($"Done: {debugGenerateSubIDString}");
-				return sb.ToString();
-			} catch (Exception) {
-				_logger.LogError($"Error: {debugGenerateSubIDString}");
-				throw;
-			}
-		}
-
-		internal async Task<string> Addlicense(Config config, List<FreeGameRecord> gameList) {
+		internal async Task<string> Addlicense(List<FreeGameRecord> gameList) {
 			if (!config.EnableASF) {
 				_logger.LogInformation(infoASFDisabled);
 				return string.Empty;
@@ -71,6 +53,21 @@ namespace RedditFreeGamesNotifier.Services {
 				throw;
 			} finally {
 				Dispose();
+			}
+		}
+
+		private string GenerateSubIDString(List<FreeGameRecord> gameList) {
+			try {
+				_logger.LogDebug(debugGenerateSubIDString);
+
+				var sb = new StringBuilder();
+				gameList.ForEach(game => sb.Append(sb.Length == 0 ? game.AppId : $",{game.AppId}"));
+
+				_logger.LogDebug($"Done: {debugGenerateSubIDString}");
+				return sb.ToString();
+			} catch (Exception) {
+				_logger.LogError($"Error: {debugGenerateSubIDString}");
+				throw;
 			}
 		}
 

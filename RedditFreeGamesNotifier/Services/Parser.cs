@@ -1,23 +1,16 @@
 ﻿using HtmlAgilityPack;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using RedditFreeGamesNotifier.Models;
 using RedditFreeGamesNotifier.Models.Record;
-using RedditFreeGamesNotifier.Modules;
 using RedditFreeGamesNotifier.Strings;
 using System.Text;
 using System.Text.RegularExpressions;
 using RedditFreeGamesNotifier.Models.SteamApi;
 
 namespace RedditFreeGamesNotifier.Services {
-	internal class Parser: IDisposable {
-		private readonly ILogger<Parser> _logger;
-		private readonly IServiceProvider services = DI.BuildDiScraperOnly();
-
-		public Parser(ILogger<Parser> logger) {
-			_logger = logger;
-		}
+	internal class Parser(ILogger<Parser> logger, Scraper scraper) : IDisposable {
+		private readonly ILogger<Parser> _logger = logger;
 
 		internal async Task<ParseResult> Parse(Dictionary<string, string> source, List<FreeGameRecord> oldRecords) {
 			try {
@@ -178,7 +171,7 @@ namespace RedditFreeGamesNotifier.Services {
 				var appDetailsUrl = ParseStrings.steamApiAppDetailsPrefix + appId;
 				_logger.LogDebug(ParseStrings.debugGetSteamAppDetails, appDetailsUrl);
 
-				var source = await services.GetRequiredService<Scraper>().GetSource(appDetailsUrl);
+				var source = await scraper.GetSource(appDetailsUrl);
 				if(source == null || source == "null") return null;
 
 				var json = JsonSerializer.Deserialize<Dictionary<string, AppDetails>>(source);
@@ -205,7 +198,7 @@ namespace RedditFreeGamesNotifier.Services {
 						/// return reddit title
 						/// skip fetching page source, since that will trigger unnecessary errors
 						if (!ParseStrings.gogIgnoredUrls.Any(record.Url.StartsWith)) {
-							var source = await services.GetRequiredService<Scraper>().GetSource(record.Url);
+							var source = await scraper.GetSource(record.Url);
 							var htmlDoc = new HtmlDocument();
 							htmlDoc.LoadHtml(source);
 
@@ -288,7 +281,7 @@ namespace RedditFreeGamesNotifier.Services {
 
 				if (url.StartsWith(ParseStrings.itchSalePageUrlPrefix)) return true;
 
-				var source = await services.GetRequiredService<Scraper>().GetSource(url);
+				var source = await scraper.GetSource(url);
 				var htmlDoc = new HtmlDocument();
 				htmlDoc.LoadHtml(source);
 

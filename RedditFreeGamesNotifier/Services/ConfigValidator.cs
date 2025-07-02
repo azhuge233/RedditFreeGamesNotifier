@@ -1,19 +1,17 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using RedditFreeGamesNotifier.Models.Config;
 
 namespace RedditFreeGamesNotifier.Services {
-	internal class ConfigValidator : IDisposable {
-		private readonly ILogger<ConfigValidator> _logger;
+	internal class ConfigValidator(ILogger<ConfigValidator> logger, IOptions<Config> config) : IDisposable {
+		private readonly ILogger<ConfigValidator> _logger = logger;
+		private readonly Config config = config.Value;
 
 		#region debug strings
 		private readonly string debugCheckValid = "Check config file validation";
 		#endregion
 
-		public ConfigValidator(ILogger<ConfigValidator> logger) {
-			_logger = logger;
-		}
-
-		internal void CheckValid(Config config) {
+		internal void CheckValid() {
 			try {
 				_logger.LogDebug(debugCheckValid);
 

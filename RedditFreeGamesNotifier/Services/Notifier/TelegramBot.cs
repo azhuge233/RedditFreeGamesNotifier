@@ -1,24 +1,22 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using RedditFreeGamesNotifier.Models.Config;
 using RedditFreeGamesNotifier.Models.Record;
 using RedditFreeGamesNotifier.Strings;
-using Telegram.Bot.Types.Enums;
 using Telegram.Bot;
+using Telegram.Bot.Types.Enums;
 
 namespace RedditFreeGamesNotifier.Services.Notifier {
-	internal class TelegramBot: INotifiable {
-		private readonly ILogger<TelegramBot> _logger;
+	internal class TelegramBot(ILogger<TelegramBot> logger, IOptions<Config> config) : INotifiable {
+		private readonly ILogger<TelegramBot> _logger = logger;
+		private readonly Config config = config.Value;
 
 		#region debug strings
 		private readonly string debugSendMessage = "Send notification to Telegram";
 		private readonly string debugSendMessageASF = "Send ASF result to Telegram";
 		#endregion
 
-		public TelegramBot(ILogger<TelegramBot> logger) {
-			_logger = logger;
-		}
-
-		public async Task SendMessage(NotifyConfig config, List<NotifyRecord> records) {
+		public async Task SendMessage(List<NotifyRecord> records) {
 			var BotClient = new TelegramBotClient(token: config.TelegramToken);
 
 			try {
@@ -40,7 +38,7 @@ namespace RedditFreeGamesNotifier.Services.Notifier {
 			}
 		}
 
-		public async Task SendMessage(NotifyConfig config, string asfResult) {
+		public async Task SendMessage(string asfResult) {
 			var BotClient = new TelegramBotClient(token: config.TelegramToken);
 
 			try {

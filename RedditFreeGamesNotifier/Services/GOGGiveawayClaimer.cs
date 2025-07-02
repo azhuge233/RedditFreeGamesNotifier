@@ -1,16 +1,14 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using RedditFreeGamesNotifier.Models.Config;
 using RedditFreeGamesNotifier.Strings;
 
 namespace RedditFreeGamesNotifier.Services {
-	internal class GOGGiveawayClaimer: IDisposable {
-		private readonly ILogger<GOGGiveawayClaimer> _logger;
+	internal class GOGGiveawayClaimer(ILogger<GOGGiveawayClaimer> logger, IOptions<Config> config) : IDisposable {
+		private readonly ILogger<GOGGiveawayClaimer> _logger = logger;
+		private readonly Config config = config.Value;
 
-		public GOGGiveawayClaimer(ILogger<GOGGiveawayClaimer> logger) {
-			_logger = logger;
-		}
-
-		public async Task Claim(Config config, bool HasGOGGiveaway) {
+		public async Task Claim(bool HasGOGGiveaway) {
 			if (!config.EnableGOGAutoClaim) {
 				_logger.LogInformation(GOGAutoClaimerStrings.infoDisabled);
 				return;

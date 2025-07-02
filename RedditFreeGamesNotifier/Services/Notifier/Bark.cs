@@ -1,5 +1,6 @@
 ﻿using HtmlAgilityPack;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using RedditFreeGamesNotifier.Models.Config;
 using RedditFreeGamesNotifier.Models.Record;
 using RedditFreeGamesNotifier.Strings;
@@ -7,19 +8,16 @@ using System.Text;
 using System.Web;
 
 namespace RedditFreeGamesNotifier.Services.Notifier {
-	internal class Bark: INotifiable {
-		private readonly ILogger<Bark> _logger;
+	internal class Bark(ILogger<Bark> logger, IOptions<Config> config) : INotifiable {
+		private readonly ILogger<Bark> _logger = logger;
+		private readonly Config config = config.Value;
 
 		#region debug strings
 		private readonly string debugSendMessage = "Send notification to Bark";
 		private readonly string debugSendMessageASF = "Send ASF result to Bark";
 		#endregion
 
-		public Bark(ILogger<Bark> logger) {
-			_logger = logger;
-		}
-
-		public async Task SendMessage(NotifyConfig config, List<NotifyRecord> records) {
+		public async Task SendMessage(List<NotifyRecord> records) {
 			try {
 				string url = new StringBuilder().AppendFormat(NotifyFormatStrings.barkUrlFormat, config.BarkAddress, config.BarkToken).ToString();
 				var webGet = new HtmlWeb();
@@ -48,7 +46,7 @@ namespace RedditFreeGamesNotifier.Services.Notifier {
 			}
 		}
 
-		public async Task SendMessage(NotifyConfig config, string asfRecord) {
+		public async Task SendMessage(string asfRecord) {
 			try {
 				_logger.LogDebug(debugSendMessageASF);
 				string url = new StringBuilder().AppendFormat(NotifyFormatStrings.barkUrlFormat, config.BarkAddress, config.BarkToken).ToString();

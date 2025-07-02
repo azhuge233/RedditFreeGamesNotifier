@@ -1,5 +1,6 @@
 ﻿using MailKit.Net.Smtp;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using MimeKit;
 using RedditFreeGamesNotifier.Models.Config;
 using RedditFreeGamesNotifier.Models.Record;
@@ -7,8 +8,9 @@ using RedditFreeGamesNotifier.Strings;
 using System.Text;
 
 namespace RedditFreeGamesNotifier.Services.Notifier {
-	internal class Email: INotifiable {
-		private readonly ILogger<Email> _logger;
+	internal class Email(ILogger<Email> logger, IOptions<Config> config) : INotifiable {
+		private readonly ILogger<Email> _logger = logger;
+		private readonly Config config = config.Value;
 
 		#region debug strings
 		private readonly string debugSendMessage = "Send notification to Email";
@@ -17,8 +19,46 @@ namespace RedditFreeGamesNotifier.Services.Notifier {
 		private readonly string debugCreateMessageASF = "Create ASf result message";
 		#endregion
 
-		public Email(ILogger<Email> logger) {
-			_logger = logger;
+		public async Task SendMessage(List<NotifyRecord> records) {
+			try {
+				_logger.LogDebug(debugSendMessage);
+
+				var message = CreateMessage(records, config.FromEmailAddress, config.ToEmailAddress);
+
+				using var client = new SmtpClient();
+				client.Connect(config.SMTPServer, config.SMTPPort, true);
+				client.Authenticate(config.AuthAccount, config.AuthPassword);
+				await client.SendAsync(message);
+				client.Disconnect(true);
+
+				_logger.LogDebug($"Done: {debugSendMessage}");
+			} catch (Exception) {
+				_logger.LogError($"Error: {debugSendMessage}");
+				throw;
+			} finally {
+				Dispose();
+			}
+		}
+
+		public async Task SendMessage(string asfResult) {
+			try {
+				_logger.LogDebug(debugCreateMessageASF);
+
+				var message = CreateMessage(asfResult, config.FromEmailAddress, config.ToEmailAddress);
+
+				using var client = new SmtpClient();
+				client.Connect(config.SMTPServer, config.SMTPPort, true);
+				client.Authenticate(config.AuthAccount, config.AuthPassword);
+				await client.SendAsync(message);
+				client.Disconnect(true);
+
+				_logger.LogDebug($"Done: {debugCreateMessageASF}");
+			} catch (Exception) {
+				_logger.LogError($"Error: {debugCreateMessageASF}");
+				throw;
+			} finally {
+				Dispose();
+			}
 		}
 
 		private MimeMessage CreateMessage(List<NotifyRecord> pushList, string fromAddress, string toAddress) {
@@ -70,49 +110,6 @@ namespace RedditFreeGamesNotifier.Services.Notifier {
 			} catch (Exception) {
 				_logger.LogError($"Error: {debugSendMessageASF}");
 				throw;
-			}
-		}
-
-
-		public async Task SendMessage(NotifyConfig config, List<NotifyRecord> records) {
-			try {
-				_logger.LogDebug(debugSendMessage);
-
-				var message = CreateMessage(records, config.FromEmailAddress, config.ToEmailAddress);
-
-				using var client = new SmtpClient();
-				client.Connect(config.SMTPServer, config.SMTPPort, true);
-				client.Authenticate(config.AuthAccount, config.AuthPassword);
-				await client.SendAsync(message);
-				client.Disconnect(true);
-
-				_logger.LogDebug($"Done: {debugSendMessage}");
-			} catch (Exception) {
-				_logger.LogError($"Error: {debugSendMessage}");
-				throw;
-			} finally {
-				Dispose();
-			}
-		}
-
-		public async Task SendMessage(NotifyConfig config, string asfResult) {
-			try {
-				_logger.LogDebug(debugCreateMessageASF);
-
-				var message = CreateMessage(asfResult, config.FromEmailAddress, config.ToEmailAddress);
-
-				using var client = new SmtpClient();
-				client.Connect(config.SMTPServer, config.SMTPPort, true);
-				client.Authenticate(config.AuthAccount, config.AuthPassword);
-				await client.SendAsync(message);
-				client.Disconnect(true);
-
-				_logger.LogDebug($"Done: {debugCreateMessageASF}");
-			} catch (Exception) {
-				_logger.LogError($"Error: {debugCreateMessageASF}");
-				throw;
-			} finally {
-				Dispose();
 			}
 		}
 

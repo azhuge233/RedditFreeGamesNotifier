@@ -3,15 +3,11 @@ using Microsoft.Extensions.Logging;
 using RedditFreeGamesNotifier.Strings;
 
 namespace RedditFreeGamesNotifier.Services {
-	internal class Scraper: IDisposable {
-		private readonly ILogger<Scraper> _logger;
+	internal class Scraper(ILogger<Scraper> logger) : IDisposable {
+		private readonly ILogger<Scraper> _logger = logger;
 
 		internal HttpClient RedditClient { get; set; }
 		internal HttpClient OthersClient { get; set; } = new HttpClient();
-
-		public Scraper(ILogger<Scraper> logger) {
-			_logger = logger;
-		}
 
 		internal async Task<Dictionary<string, string>> GetSource() {
 			try {

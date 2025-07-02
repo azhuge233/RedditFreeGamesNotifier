@@ -1,14 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using RedditFreeGamesNotifier.Models.Record;
-using RedditFreeGamesNotifier.Models.Config;
 
 namespace RedditFreeGamesNotifier.Services {
 	internal class JsonOP(ILogger<JsonOP> logger) : IDisposable {
 		private readonly ILogger<JsonOP> _logger = logger;
 
 		#region path strings
-		private readonly string configPath = $"{AppDomain.CurrentDomain.BaseDirectory}Config{Path.DirectorySeparatorChar}config.json";
 		private readonly string recordsPath = $"{AppDomain.CurrentDomain.BaseDirectory}Records{Path.DirectorySeparatorChar}records.json";
 		#endregion
 

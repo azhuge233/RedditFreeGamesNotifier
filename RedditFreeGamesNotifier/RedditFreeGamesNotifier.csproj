@@ -35,6 +35,8 @@
 	</Target>
 
 	<ItemGroup>
+
+	  <PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="9.0.7" />
 		<None Update="Config\config.json" CopyToOutputDirectory="PreserveNewest" />
 		<None Update="Records\records.json" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>

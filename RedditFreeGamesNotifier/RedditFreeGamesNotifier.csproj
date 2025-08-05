@@ -23,6 +23,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.8" />
     <PackageReference Include="MimeKit" Version="4.13.0" />
     <PackageReference Include="NLog.Extensions.Logging" Version="6.0.2" />
+		<PackageReference Include="NLog.Targets.Mail" Version="6.0.2" />
     <PackageReference Include="Telegram.Bot" Version="22.6.0" />
     <PackageReference Include="Websocket.Client" Version="5.2.0" />
   </ItemGroup>

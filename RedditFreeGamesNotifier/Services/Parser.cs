@@ -179,8 +179,8 @@ namespace RedditFreeGamesNotifier.Services {
 				_logger.LogDebug($"Done: {ParseStrings.debugGetSteamAppDetails}", appId);
 				return json[appId];
 			} catch (Exception ex) {
-				_logger.LogDebug(ParseStrings.errorGetSteamAppDetails, appId);
-				_logger.LogDebug(ex.Message);
+				_logger.LogError(ParseStrings.errorGetSteamAppDetails, appId);
+				_logger.LogError(ex.Message);
 				return null;
 			}
 		}

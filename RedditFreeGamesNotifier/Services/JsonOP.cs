@@ -12,7 +12,6 @@ namespace RedditFreeGamesNotifier.Services {
 
 		#region debug strings
 		private readonly string debugWrite = "Write records";
-		private readonly string debugLoadConfig = "Load config";
 		private readonly string debugLoadRecords = "Load previous records";
 		#endregion
 

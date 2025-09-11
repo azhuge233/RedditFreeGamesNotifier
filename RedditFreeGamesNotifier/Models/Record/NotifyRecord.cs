@@ -1,5 +1,4 @@
-﻿using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using RedditFreeGamesNotifier.Strings;
 
 namespace RedditFreeGamesNotifier.Models.Record {
@@ -12,48 +11,48 @@ namespace RedditFreeGamesNotifier.Models.Record {
 		}
 
 		public string ToTelegramMessage() {
-			if(Platform == "Steam") return new StringBuilder().AppendFormat(NotifyFormatStrings.telegramPushFormat[NotifyStrings.PlatformId[Platform]], Name, AppId, Url, RedditUrl, RemoveSpecialCharacters(Name)).ToString();
-			return new StringBuilder().AppendFormat(NotifyFormatStrings.telegramPushFormat[NotifyStrings.PlatformId[Platform]], Name, Url, RedditUrl, RemoveSpecialCharacters(Name)).ToString();
+			if(Platform == "Steam") return string.Format(NotifyFormatStrings.telegramPushFormat[NotifyStrings.PlatformId[Platform]], Name, AppId, Url, RedditUrl, RemoveSpecialCharacters(Name)).ToString();
+			return string.Format(NotifyFormatStrings.telegramPushFormat[NotifyStrings.PlatformId[Platform]], Name, Url, RedditUrl, RemoveSpecialCharacters(Name)).ToString();
 		}
 
 		public string ToBarkMessage() {
-			if(Platform == "Steam") return new StringBuilder().AppendFormat(NotifyFormatStrings.barkPushFormat[NotifyStrings.PlatformId[Platform]], Name, AppId, Url, RedditUrl).ToString();
-			return new StringBuilder().AppendFormat(NotifyFormatStrings.barkPushFormat[NotifyStrings.PlatformId[Platform]], Name, Url, RedditUrl).ToString();
+			if(Platform == "Steam") return string.Format(NotifyFormatStrings.barkPushFormat[NotifyStrings.PlatformId[Platform]], Name, AppId, Url, RedditUrl).ToString();
+			return string.Format(NotifyFormatStrings.barkPushFormat[NotifyStrings.PlatformId[Platform]], Name, Url, RedditUrl).ToString();
 		}
 
 		public string ToEmailMessage() {
-			if (Platform == "Steam") return new StringBuilder().AppendFormat(NotifyFormatStrings.emailPushHtmlFormat[NotifyStrings.PlatformId[Platform]], Name, AppId, Url, RedditUrl).ToString();
-			return new StringBuilder().AppendFormat(NotifyFormatStrings.emailPushHtmlFormat[NotifyStrings.PlatformId[Platform]], Name, Url, RedditUrl).ToString();
+			if (Platform == "Steam") return string.Format(NotifyFormatStrings.emailPushHtmlFormat[NotifyStrings.PlatformId[Platform]], Name, AppId, Url, RedditUrl).ToString();
+			return string.Format(NotifyFormatStrings.emailPushHtmlFormat[NotifyStrings.PlatformId[Platform]], Name, Url, RedditUrl).ToString();
 		}
 
 		public string ToQQMessage() {
-			if (Platform == "Steam") return new StringBuilder().AppendFormat(NotifyFormatStrings.qqPushFormat[NotifyStrings.PlatformId[Platform]], Name, AppId, Url, RedditUrl).ToString();
-			return new StringBuilder().AppendFormat(NotifyFormatStrings.qqPushFormat[NotifyStrings.PlatformId[Platform]], Name, Url, RedditUrl).ToString();
+			if (Platform == "Steam") return string.Format(NotifyFormatStrings.qqPushFormat[NotifyStrings.PlatformId[Platform]], Name, AppId, Url, RedditUrl).ToString();
+			return string.Format(NotifyFormatStrings.qqPushFormat[NotifyStrings.PlatformId[Platform]], Name, Url, RedditUrl).ToString();
 		}
 
 		public string ToPushPlusMessage() {
-			if (Platform == "Steam") return new StringBuilder().AppendFormat(NotifyFormatStrings.pushPlusPushHtmlFormat[NotifyStrings.PlatformId[Platform]], Name, AppId, Url, RedditUrl).ToString();
-			return new StringBuilder().AppendFormat(NotifyFormatStrings.pushPlusPushHtmlFormat[NotifyStrings.PlatformId[Platform]], Name, Url, RedditUrl).ToString();
+			if (Platform == "Steam") return string.Format(NotifyFormatStrings.pushPlusPushHtmlFormat[NotifyStrings.PlatformId[Platform]], Name, AppId, Url, RedditUrl).ToString();
+			return string.Format(NotifyFormatStrings.pushPlusPushHtmlFormat[NotifyStrings.PlatformId[Platform]], Name, Url, RedditUrl).ToString();
 		}
 
 		public string ToDingTalkMessage() {
-			if (Platform == "Steam") return new StringBuilder().AppendFormat(NotifyFormatStrings.dingTalkPushFormat[NotifyStrings.PlatformId[Platform]], Name, AppId, Url, RedditUrl).ToString();
-			return new StringBuilder().AppendFormat(NotifyFormatStrings.dingTalkPushFormat[NotifyStrings.PlatformId[Platform]], Name, Url, RedditUrl).ToString();
+			if (Platform == "Steam") return string.Format(NotifyFormatStrings.dingTalkPushFormat[NotifyStrings.PlatformId[Platform]], Name, AppId, Url, RedditUrl).ToString();
+			return string.Format(NotifyFormatStrings.dingTalkPushFormat[NotifyStrings.PlatformId[Platform]], Name, Url, RedditUrl).ToString();
 		}
 
 		public string ToPushDeerMessage() {
-			if (Platform == "Steam") return new StringBuilder().AppendFormat(NotifyFormatStrings.pushDeerPushFormat[NotifyStrings.PlatformId[Platform]], Name, AppId, Url, RedditUrl).ToString();
-			return new StringBuilder().AppendFormat(NotifyFormatStrings.pushDeerPushFormat[NotifyStrings.PlatformId[Platform]], Name, Url, RedditUrl).ToString();
+			if (Platform == "Steam") return string.Format(NotifyFormatStrings.pushDeerPushFormat[NotifyStrings.PlatformId[Platform]], Name, AppId, Url, RedditUrl).ToString();
+			return string.Format(NotifyFormatStrings.pushDeerPushFormat[NotifyStrings.PlatformId[Platform]], Name, Url, RedditUrl).ToString();
 		}
 
 		public string ToDiscordMessage() {
-			if (Platform == "Steam") return new StringBuilder().AppendFormat(NotifyFormatStrings.discordPushFormat[NotifyStrings.PlatformId[Platform]], Name, AppId, Url, RedditUrl).ToString();
-			return new StringBuilder().AppendFormat(NotifyFormatStrings.discordPushFormat[NotifyStrings.PlatformId[Platform]], Url, RedditUrl).ToString();
+			if (Platform == "Steam") return string.Format(NotifyFormatStrings.discordPushFormat[NotifyStrings.PlatformId[Platform]], Name, AppId, Url, RedditUrl).ToString();
+			return string.Format(NotifyFormatStrings.discordPushFormat[NotifyStrings.PlatformId[Platform]], Url, RedditUrl).ToString();
 		}
 
 		public string ToMeowMessage() { 
-			if(Platform == "Steam") return new StringBuilder().AppendFormat(NotifyFormatStrings.meowPushFormat[NotifyStrings.PlatformId[Platform]], Name, AppId, Url, RedditUrl).ToString();
-			return new StringBuilder().AppendFormat(NotifyFormatStrings.meowPushFormat[NotifyStrings.PlatformId[Platform]], Name, Url, RedditUrl).ToString();
+			if(Platform == "Steam") return string.Format(NotifyFormatStrings.meowPushFormat[NotifyStrings.PlatformId[Platform]], Name, AppId, Url, RedditUrl).ToString();
+			return string.Format(NotifyFormatStrings.meowPushFormat[NotifyStrings.PlatformId[Platform]], Name, Url, RedditUrl).ToString();
 		}
 	}
 }

@@ -6,6 +6,7 @@
 		public string Platform { get; set; }
 		public string AppId { get; set; }
 		public bool IsGOGGiveaway { get; set; } = false;
+		public bool IsSteamFest { get; set; } = false;
 
 		public FreeGameRecord() { }
 
@@ -16,6 +17,7 @@
 			Platform = record.Platform;
 			AppId = record.AppId;
 			IsGOGGiveaway = record.IsGOGGiveaway;
+			IsSteamFest = record.IsSteamFest;
 		}
 	}
 }

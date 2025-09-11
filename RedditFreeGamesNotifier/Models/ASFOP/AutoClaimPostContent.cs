@@ -1,5 +1,5 @@
 ﻿namespace RedditFreeGamesNotifier.Models.ASFOP {
-	public class AddlicenssPostContent {
+	public class AutoClaimPostContent {
 		public string Command { get; set; }
 	}
 }

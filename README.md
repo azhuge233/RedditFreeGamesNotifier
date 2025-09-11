@@ -8,6 +8,7 @@ A CLI tool
   - [https://old.reddit.com/r/freegames/](https://old.reddit.com/r/freegames/) 
 - Send notifications to Telegram, Bark, Email, QQ, PushPlus(Wechat), DingTalk, PushDeer, Discord and MeoW.
 - Auto claim detected Steam free games with ASF `addlicense` command.
+- Auto claim detected Steam game fest points shop item (free during the fest) with ASF `redeempoints` command.
 - Auto claim detected GOG giveaways.
 
 Demo Telegram Channel [@azhuge233_FreeGames](https://t.me/azhuge233_FreeGames)

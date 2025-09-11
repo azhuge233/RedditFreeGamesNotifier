@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using RedditFreeGamesNotifier.Models.ASFOP;
+using RedditFreeGamesNotifier.Models.Config;
 using RedditFreeGamesNotifier.Models.Record;
+using RedditFreeGamesNotifier.Strings;
 using System.Text;
 using System.Text.Json;
-using RedditFreeGamesNotifier.Strings;
-using RedditFreeGamesNotifier.Models.Config;
-using Microsoft.Extensions.Options;
 
 namespace RedditFreeGamesNotifier.Services {
 	internal class ASFOP(ILogger<ASFOP> logger, IOptions<Config> config) : IDisposable {
@@ -14,13 +14,13 @@ namespace RedditFreeGamesNotifier.Services {
 
 		#region debug strings
 		private readonly string debugASFOP = "ASFOP";
-		private readonly string debugGenerateSubIDString = "GenerateSubIDString";
-		private readonly string infoAddlicenseResult = "Addlicense result: \n";
-		private readonly string infoNoRecords = "No new record, skipping addlicense";
+		private readonly string debugGenerateSubIDString = "Generate Commands";
+		private readonly string infoAddlicenseResult = "Claim result: \n";
+		private readonly string infoNoRecords = "No new record, skipping auto claim";
 		private readonly string infoASFDisabled = "ASF disabled, skipping";
 		#endregion
 
-		internal async Task<string> Addlicense(List<FreeGameRecord> gameList) {
+		internal async Task<string> Claim(List<FreeGameRecord> gameList) {
 			if (!config.EnableASF) {
 				_logger.LogInformation(infoASFDisabled);
 				return string.Empty;
@@ -38,16 +38,27 @@ namespace RedditFreeGamesNotifier.Services {
 				client.DefaultRequestHeaders.Add("Authentication", config.ASFIPCPassword);
 				client.DefaultRequestHeaders.Add(ASFStrings.UAKey, ASFStrings.UAValue);
 
-				var url = new StringBuilder().AppendFormat(ASFStrings.commandUrl, config.ASFIPCUrl).ToString();
-				var content = new StringContent(JsonSerializer.Serialize(new AddlicenssPostContent() { Command = $"{ASFStrings.addlicenseCommand}{GenerateSubIDString(gameList)}" }), Encoding.UTF8, "application/json");
+				var url = string.Format(ASFStrings.commandUrl, config.ASFIPCUrl);
 
-				var response = await client.PostAsync(url, content);
-				_logger.LogDebug(response.ToString());
-				var responseContent = JsonSerializer.Deserialize<ASFResponseContent>(await response.Content.ReadAsStringAsync()).Result;
-				_logger.LogInformation($"{infoAddlicenseResult}{responseContent}");
+				var commands = GenerateCommands(gameList);
+
+				var responseContents = new List<string>();
+				foreach (var command in commands) {
+					var postContent = new AutoClaimPostContent() { Command = command };
+					var serializedContent = new StringContent(JsonSerializer.Serialize(postContent), Encoding.UTF8, "application/json");
+
+					var response = await client.PostAsync(url, serializedContent);
+					_logger.LogDebug(response.ToString());
+
+					var asfResponse = await response.Content.ReadAsStringAsync();
+					var responseContent = JsonSerializer.Deserialize<ASFResponseContent>(asfResponse).Result;
+					_logger.LogInformation($"{infoAddlicenseResult}{responseContent}");
+
+					responseContents.Add(responseContent);
+				}
 
 				_logger.LogDebug($"Done: {debugASFOP}");
-				return responseContent;
+				return string.Join($"{Environment.NewLine}{Environment.NewLine}", responseContents);
 			} catch (Exception) {
 				_logger.LogError($"Error: {debugASFOP}");
 				throw;
@@ -56,15 +67,22 @@ namespace RedditFreeGamesNotifier.Services {
 			}
 		}
 
-		private string GenerateSubIDString(List<FreeGameRecord> gameList) {
+		private List<string> GenerateCommands(List<FreeGameRecord> gameList) {
 			try {
 				_logger.LogDebug(debugGenerateSubIDString);
 
-				var sb = new StringBuilder();
-				gameList.ForEach(game => sb.Append(sb.Length == 0 ? game.AppId : $",{game.AppId}"));
+				List<string> commands = [];
+
+				var groups = gameList.GroupBy(game => game.IsSteamFest);
+
+				foreach (var group in groups) {
+					var commandPrefix = group.Key ? ASFStrings.redeemPointCommand : ASFStrings.addlicenseCommand;
+					commands.Add($"{commandPrefix}{string.Join(',', group.Select(item => item.AppId))}");
+					_logger.LogDebug(commands[^1]);
+				}
 
 				_logger.LogDebug($"Done: {debugGenerateSubIDString}");
-				return sb.ToString();
+				return commands;
 			} catch (Exception) {
 				_logger.LogError($"Error: {debugGenerateSubIDString}");
 				throw;

@@ -34,7 +34,7 @@ namespace RedditFreeGamesNotifier {
 					jsonOp.WriteData(parseResult.Records);
 
 					// Add free games through ASF, returns ASF result string
-					var addlicenseResult = await servicesProvider.GetRequiredService<ASFOP>().Addlicense(parseResult.SteamFreeGames);
+					var addlicenseResult = await servicesProvider.GetRequiredService<ASFOP>().Claim(parseResult.SteamFreeGames);
 
 					// GOG auto-claim
 					await servicesProvider.GetRequiredService<GOGGiveawayClaimer>().Claim(parseResult.HasGOGGiveaway);

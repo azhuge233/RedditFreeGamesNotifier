@@ -46,10 +46,10 @@ namespace RedditFreeGamesNotifier.Services {
 						var platform = ParseStrings.SupportedPlatform[dataDomain];
 						var redditLink = new StringBuilder().Append(ParseStrings.redditUrl).Append(dataPermaLink).ToString();
 
-						var isSteamPointsShopItem = platform == "Steam" && dataUrl.StartsWith(ParseStrings.steamPointsShopUrlPrefix);
+						var isSteamFest = platform == "Steam" && dataUrl.StartsWith(ParseStrings.steamPointsShopUrlPrefix);
 						var isGOGGiveaway = platform == "GOG" && IsGOGGiveaway(dataUrl);
 
-						var appId = isSteamPointsShopItem ? ParseStrings.steamPointsShopItem : GetGameId(dataUrl);
+						var appId = GetGameIdFromUrl(dataUrl);
 						var subId = string.Empty;
 						AppDetails steamAppDetails = null;
 						#endregion
@@ -62,20 +62,21 @@ namespace RedditFreeGamesNotifier.Services {
 						}
 
 						///Platform sepicific
+						#region Steam
 						// Steam
 						if (platform == "Steam") {
 							// no app/sub id
 							if (appId == string.Empty) {
 								_logger.LogDebug(ParseStrings.debugSteamIDNotDetected, dataUrl);
 								continue;
-							} else if (appId == ParseStrings.steamPointsShopItem) {
-								_logger.LogDebug(ParseStrings.debugSteamPointsShtopItemDetected, dataUrl);
-							} else if (result.Records.Any(record => record.AppId.Split(',').Contains(appId))) { 
+							} else if (result.Records.Any(record => record.AppId == appId || record.AppId.Split(',').Contains(appId))) { 
 								_logger.LogDebug(ParseStrings.debugSteamIDDuplicationDetected, dataUrl);
 								continue;
 							}
 						}
+						#endregion
 
+						#region GOG
 						// GOG
 						if (platform == "GOG") {
 							if (result.Records.Any(record => record.IsGOGGiveaway == true) && isGOGGiveaway) {
@@ -91,8 +92,11 @@ namespace RedditFreeGamesNotifier.Services {
 						}
 						#endregion
 
+						#endregion
+
 						#region extra validation and information gathering
-						//Itchio
+
+						#region itch.io
 						if (platform == "Itch.io") {
 							/// Solve notify duplication caused by network failing
 							/*	The Reason
@@ -113,34 +117,45 @@ namespace RedditFreeGamesNotifier.Services {
 								continue;
 							}
 						}
+						#endregion
 
-						if (platform == "Steam" && !isSteamPointsShopItem) {
-							steamAppDetails = await GetSteamAppDetails(appId.Split('/')[1]);
-							subId = await GetSteamSubID(steamAppDetails);
+						#region Steam
+						if (platform == "Steam") {
+							if (isSteamFest) {
+								_logger.LogDebug(ParseStrings.debugSteamPointsShtopItemDetected, dataUrl);
+								appId = await GetPointShopItemDefId(dataUrl);
+							} else {
+								steamAppDetails = await GetSteamAppDetails(appId.Split('/')[1]);
+								subId = await GetSteamSubID(steamAppDetails);
+							}
 						}
+						#endregion
+
 						#endregion
 
 						_logger.LogDebug($"{dataUrl} | {redditLink} | {platform} | {appId}\n");
 
 						var newRecord = new FreeGameRecord() {
 							Url = dataUrl,
+							Name = redditTitle,
 							RedditUrl = redditLink,
 							Platform = platform,
 							AppId = string.IsNullOrEmpty(subId) ? appId : $"{appId},{subId}",
-							IsGOGGiveaway = isGOGGiveaway
+							IsGOGGiveaway = isGOGGiveaway,
+							IsSteamFest = isSteamFest
 						};
-						newRecord.Name = await GetGameName(newRecord, steamAppDetails, redditTitle);
+						if (!newRecord.IsSteamFest) newRecord.Name = await GetGameName(newRecord, steamAppDetails);
 
 						result.Records.Add(newRecord);
 
 						#region notification list
 						if (!oldRecords.Any(record => record.RedditUrl == newRecord.RedditUrl || 
 							record.Url == newRecord.Url || 
-							(newRecord.Platform == "Steam" && !isSteamPointsShopItem && record.AppId == newRecord.AppId) )) {
+							(newRecord.IsSteamFest == record.IsSteamFest && record.AppId == newRecord.AppId && newRecord.AppId != ParseStrings.steamPointsShopItem) )) {
 
 							_logger.LogInformation(ParseStrings.infoFoundNewGame, newRecord.Name);
 
-							if (newRecord.Platform == "Steam" && !isSteamPointsShopItem && !string.IsNullOrEmpty(newRecord.AppId)) result.SteamFreeGames.Add(newRecord);
+							if (newRecord.Platform == "Steam" && !string.IsNullOrEmpty(newRecord.AppId) && newRecord.AppId != ParseStrings.steamPointsShopItem) result.SteamFreeGames.Add(newRecord);
 							else if (newRecord.Platform == "GOG" && newRecord.IsGOGGiveaway) result.HasGOGGiveaway = true;
 
 							result.NotifyRecords.Add(newRecord);
@@ -160,10 +175,38 @@ namespace RedditFreeGamesNotifier.Services {
 			}
 		}
 
-		private static string GetGameId(string url) {
+		private static string GetGameIdFromUrl(string url) {
 			var appIdMatch = Regex.Match(url, ParseStrings.appIdRegex);
 			var subIdMatch = Regex.Match(url, ParseStrings.subIdRegex);
 			return appIdMatch.Success ? appIdMatch.Value : subIdMatch.Success ? subIdMatch.Value : string.Empty;
+		}
+
+		private async Task<string> GetPointShopItemDefId(string url) {
+			try {
+				_logger.LogDebug(ParseStrings.debugGetPointShopItemDefId);
+				var appIdMatch = Regex.Match(url, ParseStrings.appIdRegex);
+
+				if (!appIdMatch.Success) {
+					_logger.LogDebug(ParseStrings.debugNoSteamFestivalAppIDDetected);
+					return ParseStrings.steamPointsShopItem;
+				}
+
+				var appId = appIdMatch.Value.Replace(ParseStrings.appIdPrefix, string.Empty);
+
+				var source = await scraper.GetSource($"{ParseStrings.steamQueryRewardItemsApiPrefix}{appId}");
+
+				var json = JsonSerializer.Deserialize<QueryRewardItemsResponse>(source);
+				var defIds = json.Response.Definitions.Where(d => d.Active && d.PointCost == "0").Select(d => d.Defid.ToString());
+
+				var result = !defIds.Any() ? ParseStrings.steamPointsShopItem : string.Join(',', defIds);
+
+				_logger.LogDebug($"Done: {ParseStrings.debugGetPointShopItemDefId} | {result}");
+				return result;
+			} catch (Exception ex) {
+				_logger.LogError($"Error: {ParseStrings.errorGetPointShopItemDefIdFailed}", url);
+				_logger.LogError(ex.Message);
+				return ParseStrings.steamPointsShopItem;
+			}
 		}
 
 		private async Task<AppDetails> GetSteamAppDetails(string appId) {
@@ -185,13 +228,12 @@ namespace RedditFreeGamesNotifier.Services {
 			}
 		}
 
-		private async Task<string> GetGameName(FreeGameRecord record, AppDetails appDetails, string redditTitle) {
+		private async Task<string> GetGameName(FreeGameRecord record, AppDetails appDetails) {
 			try {
-				var gameName = redditTitle;
+				_logger.LogDebug(ParseStrings.debugGetGameNameWithUrl, record.Url);
+				var gameName = record.Name;
 
 				if (record.Platform == "GOG") {
-					_logger.LogDebug(ParseStrings.debugGetGameNameWithUrl, record.Url);
-
 					if (!record.IsGOGGiveaway) {
 						/// When url is GOG free partner page: https://www.gog.com/partner/free_games
 						/// or any other ignored page in the set, e.g. https://www.gog.com/account
@@ -212,11 +254,9 @@ namespace RedditFreeGamesNotifier.Services {
 							if (!gogTitle.Contains(ParseStrings.gogAllGamesPageTitle) &&
 								!gogTitle.Contains(ParseStrings.gogRedirectedToMainPageTitle))
 								gameName = htmlDoc.DocumentNode.SelectSingleNode(ParseStrings.gogGameTitleXPath).InnerText.Trim();
-						} else _logger.LogDebug(ParseStrings.debugGOGFreePartnerPage, redditTitle);
+						} else _logger.LogDebug(ParseStrings.debugGOGFreePartnerPage, record.Name);
 					} else _logger.LogDebug(ParseStrings.debugIsGOGGiveaway, record.Url);
-				}
-
-				if (record.Platform == "Steam") {
+				} else if (record.Platform == "Steam") {
 					if (appDetails != null && appDetails.Success) gameName = appDetails.Data.Name;
 					else _logger.LogDebug(ParseStrings.debugGetGameNameAppDetailsFailed, record.AppId);
 				}
@@ -226,7 +266,7 @@ namespace RedditFreeGamesNotifier.Services {
 			} catch (Exception) {
 				_logger.LogError(ParseStrings.errorGetGameName, record.Url);
 
-				return redditTitle;
+				return record.Name;
 			}
 		}
 

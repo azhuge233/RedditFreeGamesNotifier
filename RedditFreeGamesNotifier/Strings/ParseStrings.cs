@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization.Json;
+﻿using System.Collections.Specialized;
+using System.Runtime.Serialization.Json;
 
 namespace RedditFreeGamesNotifier.Strings {
 	internal class ParseStrings {
@@ -29,6 +30,8 @@ namespace RedditFreeGamesNotifier.Strings {
 
 		internal static readonly string steamPointsShopUrlPrefix = "https://store.steampowered.com/points/shop";
 		internal static readonly string steamPointsShopItem = "Steam Points Shop Item";
+
+		internal static readonly string steamQueryRewardItemsApiPrefix = "https://api.steampowered.com/ILoyaltyRewardsService/QueryRewardItems/v1/?appids[0]=";
 
 		internal static readonly string appIdRegex = @"app/[0-9]*";
 		internal static readonly string subIdRegex = @"sub/[0-9]*";
@@ -120,6 +123,10 @@ namespace RedditFreeGamesNotifier.Strings {
 		internal static readonly string debugFoundInPreviousPage = "Skipping, found same record in other source: {0}\n";
 
 		internal static readonly string debugSteamPointsShtopItemDetected = "Steam points shop item detected: {0}\n";
+
+		internal static readonly string debugNoSteamFestivalAppIDDetected = "No Steam Festival AppID detected!";
+		internal static readonly string debugGetPointShopItemDefId = "Get point shop item DefID";
+		internal static readonly string errorGetPointShopItemDefIdFailed = "Cannot get point shop item DefID: {0}";
 		#endregion
 	}
 }

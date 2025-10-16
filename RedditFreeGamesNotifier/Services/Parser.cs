@@ -24,6 +24,10 @@ namespace RedditFreeGamesNotifier.Services {
 
 					var divs = htmlDoc.DocumentNode.SelectNodes(ParseStrings.redditDivXPath).ToList();
 
+					_logger.LogDebug(ParseStrings.infoTotalDivCount, divs.Count);
+
+					if (divs.Count == 0) throw new Exception(ParseStrings.errorNoDivDetected);
+
 					foreach (var div in divs) {
 						#region get game info
 						var spans = div.SelectNodes(ParseStrings.redditEndedPXPath);

@@ -127,6 +127,9 @@ namespace RedditFreeGamesNotifier.Strings {
 		internal static readonly string debugNoSteamFestivalAppIDDetected = "No Steam Festival AppID detected!";
 		internal static readonly string debugGetPointShopItemDefId = "Get point shop item DefID";
 		internal static readonly string errorGetPointShopItemDefIdFailed = "Cannot get point shop item DefID: {0}";
+
+		internal static readonly string infoTotalDivCount = "Total div count: {0}";
+		internal static readonly string errorNoDivDetected = "No div detected.";
 		#endregion
 	}
 }

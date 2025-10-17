@@ -207,8 +207,8 @@ namespace RedditFreeGamesNotifier.Services {
 				_logger.LogDebug($"Done: {ParseStrings.debugGetPointShopItemDefId} | {result}");
 				return result;
 			} catch (Exception ex) {
-				_logger.LogError($"Error: {ParseStrings.errorGetPointShopItemDefIdFailed}", url);
-				_logger.LogError(ex.Message);
+				_logger.LogWarning($"Error: {ParseStrings.errorGetPointShopItemDefIdFailed}", url);
+				_logger.LogWarning(ex.Message);
 				return ParseStrings.steamPointsShopItem;
 			}
 		}
@@ -268,7 +268,7 @@ namespace RedditFreeGamesNotifier.Services {
 				_logger.LogDebug($"Done: {ParseStrings.debugGetGameNameWithUrl}", record.Url);
 				return gameName;
 			} catch (Exception) {
-				_logger.LogError(ParseStrings.errorGetGameName, record.Url);
+				_logger.LogWarning(ParseStrings.errorGetGameName, record.Url);
 
 				return record.Name;
 			}
@@ -310,7 +310,7 @@ namespace RedditFreeGamesNotifier.Services {
 				_logger.LogDebug(ParseStrings.debugGetSteamSubIDNoSubID);
 				return freeSubsIDString;
 			} catch (Exception) {
-				_logger.LogError($"Error: {ParseStrings.debugGetSteamSubID}");
+				_logger.LogWarning($"Error: {ParseStrings.debugGetSteamSubID}");
 				return string.Empty;
 			}
 		}
@@ -337,7 +337,7 @@ namespace RedditFreeGamesNotifier.Services {
 				_logger.LogDebug($"Done: {ParseStrings.debugCheckItchIOClaimable}");
 				return buyButtons != null && buyButtons.Count > 0 && buyButtons.Any(button => button.InnerText.Contains(ParseStrings.itchioDownloadOrClaimText));
 			} catch (Exception) {
-				_logger.LogError($"Error: {ParseStrings.debugCheckItchIOClaimable} | {url}");
+				_logger.LogWarning($"Error: {ParseStrings.debugCheckItchIOClaimable} | {url}");
 				return false;
 			}
 		}

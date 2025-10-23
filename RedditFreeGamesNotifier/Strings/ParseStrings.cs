@@ -1,4 +1,4 @@
-namespace RedditFreeGamesNotifier.Strings {
+﻿namespace RedditFreeGamesNotifier.Strings {
 	internal class ParseStrings {
 		#region platform 
 		internal static readonly Dictionary<string, string> SupportedPlatform = new() {
@@ -50,7 +50,8 @@ namespace RedditFreeGamesNotifier.Strings {
 		internal static readonly string gogRedirectedToMainPageTitle = "GOG.COM | GOG.COM";
 		internal static HashSet<string> gogIgnoredUrls = [
 			"https://www.gog.com/partner/free_games",
-			"https://www.gog.com/account"
+			"https://www.gog.com/account",
+			"https://www.gog.com/redeem"
 		];
 		#endregion
 
@@ -110,7 +111,7 @@ namespace RedditFreeGamesNotifier.Strings {
 
 		internal static readonly string debugGOGGiveawayDuplication = "Skipping, same GOG giveaway was found in other source: {0}\n";
 		internal static readonly string debugGOGDuplication = "Skipping, same GOG game was found in other source: {0}\n";
-		internal static readonly string debugGOGFreePartnerPage = "Skipping, GOG free partner page detected: {0}\n";
+		internal static readonly string debugGOGFreePartnerPage = "Skipping, GOG free partner page/account/redeem detected: {0}\n";
 
 		internal static readonly string debugSteamIDDuplicationInOldRecord = "Skipping, same App/Sub ID was found in old records: {0}\n";
 		internal static readonly string debugSteamIDNotDetected = "Skipping, no Steam App/Sub ID detected: {0}\n";

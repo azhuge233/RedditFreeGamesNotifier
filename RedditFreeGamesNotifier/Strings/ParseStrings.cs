@@ -1,6 +1,3 @@
-﻿using System.Collections.Specialized;
-using System.Runtime.Serialization.Json;
-
 namespace RedditFreeGamesNotifier.Strings {
 	internal class ParseStrings {
 		#region platform 

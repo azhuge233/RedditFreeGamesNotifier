@@ -288,10 +288,12 @@ namespace RedditFreeGamesNotifier.Services {
 
 				if(ParseStrings.supportedGameType.Contains(data.Type)) {
 					if (data.PackageGroups != null && data.PackageGroups.Count > 0) {
-						var defaultPackageGroup = appDetails.Data.PackageGroups.First(pg => pg.Name == ParseStrings.steamAppDetailsGameTypeValueDefault);
+						var defaultPackageGroup = appDetails.Data.PackageGroups.FirstOrDefault(pg => pg.Name == ParseStrings.steamAppDetailsGameTypeValueDefault, appDetails.Data.PackageGroups.First());
 						var freeSubs = defaultPackageGroup.Subs.Where(sub => sub.IsFreeLicense == true).ToList();
-						freeSubsIDString = string.Join(",", freeSubs.Select(sub => $"{ParseStrings.subIdPrefix}{sub.PackageID}"));
-						_logger.LogDebug(ParseStrings.debugGotSteamSubID, freeSubsIDString);
+						if (freeSubs.Count > 0) {
+							freeSubsIDString = string.Join(",", freeSubs.Select(sub => $"{ParseStrings.subIdPrefix}{sub.PackageID}"));
+							_logger.LogDebug(ParseStrings.debugGotSteamSubID, freeSubsIDString);
+						} else _logger.LogDebug(ParseStrings.debugNoFreeSubID);
 					}
 
 					_logger.LogDebug(ParseStrings.debugGetSteamSubIDMainGameAppID);

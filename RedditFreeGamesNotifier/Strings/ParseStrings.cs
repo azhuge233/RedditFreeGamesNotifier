@@ -90,6 +90,7 @@
 
 		internal static readonly string debugGetSteamSubID = "Get Steam Sub ID";
 		internal static readonly string debugGotSteamSubID = "Got Steam Sub ID: {0}";
+		internal static readonly string debugNoFreeSubID = "No free sub detected.";
 		internal static readonly string debugGetSteamSubIDNotDLCOrGame = "Not DLC or game, skip getting sub ID, returning app ID instead.";
 		internal static readonly string debugGetSteamSubIDNoSubID = "No sub ID detected, returning empty string.";
 		internal static readonly string debugGetSteamSubIDMainGameAppID = "Getting main game AppID";

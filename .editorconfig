@@ -2,3 +2,5 @@
 
 # CA2254: Template should be a static expression
 dotnet_diagnostic.CA2254.severity = silent
+
+dotnet_diagnostic.CA1873.severity = silent

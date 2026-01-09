@@ -46,7 +46,7 @@ namespace RedditFreeGamesNotifier.Models.Record {
 		}
 
 		public string ToDiscordMessage() {
-			if (Platform == "Steam") return string.Format(NotifyFormatStrings.discordPushFormat[NotifyStrings.PlatformId[Platform]], Name, AppId, Url, RedditUrl);
+			if (Platform == "Steam") return string.Format(NotifyFormatStrings.discordPushFormat[NotifyStrings.PlatformId[Platform]], AppId, Url, RedditUrl);
 			return string.Format(NotifyFormatStrings.discordPushFormat[NotifyStrings.PlatformId[Platform]], Url, RedditUrl);
 		}
 

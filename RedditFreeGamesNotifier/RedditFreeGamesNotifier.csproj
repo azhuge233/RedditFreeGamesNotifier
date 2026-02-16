@@ -18,10 +18,10 @@
 
   <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
-    <PackageReference Include="MailKit" Version="4.14.1" />
+    <PackageReference Include="MailKit" Version="4.15.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.3" />
-    <PackageReference Include="MimeKit" Version="4.14.0" />
+    <PackageReference Include="MimeKit" Version="4.15.0" />
     <PackageReference Include="NLog.Extensions.Logging" Version="6.1.1" />
 		<PackageReference Include="NLog.Targets.Mail" Version="6.0.3" />
     <PackageReference Include="Telegram.Bot" Version="22.9.0" />

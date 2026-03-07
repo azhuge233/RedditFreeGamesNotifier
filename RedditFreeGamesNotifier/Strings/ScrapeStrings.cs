@@ -27,6 +27,7 @@
 		#region debug strings
 		internal static readonly string debugGetSource = "Get source";
 		internal static readonly string debugGetSourceWithUrl = "Getting source: {0}";
+		internal static readonly string errorStatusCode = "Failed to get content from {0}. Status code: {1}";
 		#endregion
 	}
 }

@@ -25,6 +25,9 @@ namespace RedditFreeGamesNotifier.Services {
 				foreach (var url in ScrapeStrings.RedditUrls) {
 					_logger.LogDebug(ScrapeStrings.debugGetSourceWithUrl, url);
 					var response = await RedditClient.GetAsync(url);
+
+					if(!response.IsSuccessStatusCode) throw new Exception(string.Format(ScrapeStrings.errorStatusCode, url, response.StatusCode));
+
 					var content = await response.Content.ReadAsStringAsync();
 					results.Add(url, content);
 

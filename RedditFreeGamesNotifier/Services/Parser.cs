@@ -30,6 +30,8 @@ namespace RedditFreeGamesNotifier.Services {
 
 					foreach (var div in divs) {
 						#region get game info
+
+						#region Pre-check for unsupported platforms and ignore keywords to avoid unnecessary processing and potential errors
 						var spans = div.SelectNodes(ParseStrings.redditEndedPXPath);
 						var spanInnerText = string.Empty;
 						if (spans != null && spans.Count > 1) {
@@ -40,6 +42,7 @@ namespace RedditFreeGamesNotifier.Services {
 
 						// Check if post is in supported game platform list
 						if (ParseStrings.ignoreKeywords.Contains(spanInnerText) || !ParseStrings.SupportedPlatform.Keys.Any(dataDomain.EndsWith)) continue;
+						#endregion
 
 						if (dataDomain.EndsWith("itch.io")) dataDomain = "itch.io";
 
@@ -125,6 +128,12 @@ namespace RedditFreeGamesNotifier.Services {
 
 						#region Steam
 						if (platform == "Steam") {
+							// Skip if title contains keywords that indicate it's not a free game, e.g. "demo", to avoid unnecessary processing
+							if (ParseStrings.ignoreKeywordsInTitle.Any(word => redditTitle.Contains(word, StringComparison.CurrentCultureIgnoreCase))) { 
+								_logger.LogDebug(ParseStrings.debugSteamDemoDetected, dataUrl);
+								continue;
+							}
+
 							if (isSteamFest) {
 								_logger.LogDebug(ParseStrings.debugSteamPointsShtopItemDetected, dataUrl);
 								appId = await GetPointShopItemDefId(dataUrl);

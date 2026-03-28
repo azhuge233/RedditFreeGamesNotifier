@@ -14,6 +14,10 @@
 		internal static HashSet<string> ignoreKeywords = [
 			"ended", "expired", "contains tasks", "discussion", "social media required"
 		];
+
+		internal static HashSet<string> ignoreKeywordsInTitle = [
+			"demo"
+		];
 		#endregion
 
 		internal static readonly string redditUrl = "https://old.reddit.com";
@@ -129,6 +133,8 @@
 
 		internal static readonly string infoTotalDivCount = "Total div count: {0}";
 		internal static readonly string errorNoDivDetected = "No div detected.";
+
+		internal static readonly string debugSteamDemoDetected = "Skipping, Steam demo detected: {0}\n";
 		#endregion
 	}
 }

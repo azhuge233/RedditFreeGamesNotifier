@@ -135,6 +135,8 @@
 		internal static readonly string errorNoDivDetected = "No div detected.";
 
 		internal static readonly string debugSteamDemoDetected = "Skipping, Steam demo detected: {0}\n";
+
+		internal static readonly string debugSteamAppIDTypeNotSupported = "Skipping, Steam App ID type not supported: {0}\n";
 		#endregion
 	}
 }

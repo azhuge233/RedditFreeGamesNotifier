@@ -72,11 +72,19 @@ namespace RedditFreeGamesNotifier.Services {
 						#region Steam
 						// Steam
 						if (platform == "Steam") {
-							// no app/sub id
 							if (appId == string.Empty) {
 								_logger.LogDebug(ParseStrings.debugSteamIDNotDetected, dataUrl);
 								continue;
-							} else if (result.Records.Any(record => record.AppId == appId || record.AppId.Split(',').Contains(appId))) { 
+							}
+
+							var incomingIds = appId.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+							if (result.Records.Any(record => {
+								var recIds = record.AppId.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToHashSet(StringComparer.OrdinalIgnoreCase);
+								return record.AppId.Equals(appId, StringComparison.OrdinalIgnoreCase)
+									   || recIds.Contains(appId, StringComparer.OrdinalIgnoreCase)
+									   || recIds.Intersect(incomingIds, StringComparer.OrdinalIgnoreCase).Any();
+							})) {
 								_logger.LogDebug(ParseStrings.debugSteamIDDuplicationDetected, dataUrl);
 								continue;
 							}
@@ -138,8 +146,11 @@ namespace RedditFreeGamesNotifier.Services {
 								_logger.LogDebug(ParseStrings.debugSteamPointsShtopItemDetected, dataUrl);
 								appId = await GetPointShopItemDefId(dataUrl);
 							} else {
-								steamAppDetails = await GetSteamAppDetails(appId.Split('/')[1]);
-								subId = await GetSteamSubID(steamAppDetails);
+								// If the URL doesn't contain an app ID, skip fetching app details to avoid unnecessary processing and potential errors
+								if (appId.StartsWith('a')) {
+									steamAppDetails = await GetSteamAppDetails(appId.Split('/')[1]);
+									subId = await GetSteamSubID(steamAppDetails);
+								} else _logger.LogDebug(ParseStrings.debugSteamAppIDTypeNotSupported, appId);
 							}
 						}
 						#endregion

@@ -57,7 +57,7 @@ namespace RedditFreeGamesNotifier.Services {
 				_logger.LogDebug($"Done: {ScrapeStrings.debugGetSource}");
 				return result;
 			} catch (Exception) {
-				_logger.LogWarning($"Error: {ScrapeStrings.debugGetSource}");
+				_logger.LogWarning($"Warn: {ScrapeStrings.debugGetSource}");
 				throw;
 			} finally {
 				Dispose();

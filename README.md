@@ -11,7 +11,7 @@ A CLI tool
 - Auto claim detected Steam game fest points shop item (free during the fest) with ASF `redeempoints` command.
 - Auto claim detected GOG giveaways.
 
-Demo Telegram Channel [@azhuge233_FreeGames](https://t.me/azhuge233_FreeGames)
+Demo Telegram Channel [@azhuge233_FreeGames](https://telegram.me/azhuge233_FreeGames)
 
 ## Build
 
